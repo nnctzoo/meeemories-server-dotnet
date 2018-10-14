@@ -1,0 +1,37 @@
+﻿@model IEnumerable<MediaViewModel>
+@{
+    Layout = null;
+}
+
+@foreach (var media in Model)
+{
+<article>
+    @if (media.MediaType == MediaType.Video)
+    {
+        var thumb = media.Sources.Where(s => s.MimeType.StartsWith("image")).FirstOrDefault();
+        <video controls poster="@(thumb?.Url??"")">
+            @foreach (var source in media.Sources.Where(s => s.MimeType.StartsWith("video")))
+            {
+                <source src="@source.Url" type="@source.MimeType" />
+            }
+        </video>
+    }
+    else
+    {
+        foreach (var source in media.Sources)
+        {
+            <figure>
+                <img src="@source.Url" />
+                <figcaption>@source.Width x @source.Height</figcaption>
+            </figure>
+        }
+    }
+</article>
+}
+@if (Model.Count() > 0)
+{
+    var last = Model.Last();
+    <div ic-append-from="/page?skipToken=@last.Id" ic-trigger-on="scrolled-into-view" ic-target="#list" ic-indicator="#indicator"></div>
+}
+
+
