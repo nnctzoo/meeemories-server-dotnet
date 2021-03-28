@@ -27,10 +27,10 @@ jobs:
          echo ::set-output name=upload_url::$upload_url
     - name: Upload
       uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.geturl.outputs.upload_url }}
-          asset_path: ./Meeemories.zip
-          asset_name: Meeemories.zip
-          asset_content_type: application/zip
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.geturl.outputs.upload_url }}
+        asset_path: ./Meeemories.zip
+        asset_name: Meeemories.zip
+        asset_content_type: application/zip
