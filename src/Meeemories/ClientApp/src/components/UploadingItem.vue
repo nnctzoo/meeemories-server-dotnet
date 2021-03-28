@@ -1,0 +1,95 @@
+﻿<template>
+    <div :class="klass">
+        <div class="uploading-item__thumb" ref="thumb"></div>
+        <div class="uploading-item__indicator" :style="style"></div>
+        <ul class="uploading-item__breadcrumb">
+            <li><span>アップロード</span></li>
+            <li><span>リサイズ</span></li>
+            <li><span>投稿完了</span></li>
+        </ul>
+        <!-- <button class="uploading-item__remove" data-action="uploading-item#remove"><i class="material-icons">delete</i></button> -->
+    </div>
+</template>
+<script>
+    export default {
+        props: {
+            id: String,
+            file: File,
+            progress: Number,
+            status: String,
+            thumbnail: String
+        },
+        computed: {
+            klass() {
+                return {
+                    'uploading-item': true,
+                    'uploading-item--uploaded': this.status === 'uploading',
+                    'uploading-item--uploaded': this.status === 'uploaded',
+                    'uploading-item--converting': this.status === 'converting',
+                    'uploading-item--succeeded': this.status === 'complete',
+                    'uploading-item--faild': this.status === 'fail',
+                }
+            },
+            style() {
+                return {
+                    width: this.progress + '%'
+                }
+            },
+        },
+        methods: {
+            setThumb(file) {
+                if (file.type.match('image')) {
+                    this.setThumbUrl(URL.createObjectURL(file));
+                }
+                else if (file.type.match('video')) {
+                    const video = document.createElement('video');
+                    const snap = () => {
+                        const canvas = document.createElement('canvas');
+                        canvas.width = 64;
+                        canvas.height = 64;
+                        canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height);
+                        var url = canvas.toDataURL();
+                        var success = url.length > 1000;
+                        if (success) {
+                            this.setThumbUrl(url);
+                        }
+                        return success;
+                    }
+                    function loadeddata() {
+                        if (snap()) {
+                            video.removeEventListener('timeupdate', timeupdate);
+                        }
+                    }
+                    function timeupdate() {
+                        if (snap()) {
+                            video.removeEventListener('timeupdate', timeupdate);
+                            video.pause();
+                        }
+                    }
+                    video.addEventListener('timeupdate', timeupdate);
+                    video.addEventListener('loadeddata', loadeddata);
+                    video.preload = 'metadata';
+                    video.src = URL.createObjectURL(file);
+                    video.muted = true;
+                    video.playsInline = true;
+                    video.play();
+                }
+            },
+            setThumbUrl(url) {
+                this.$refs.thumb.style.backgroundImage = "url('" + url + "')";
+            },
+            src(url) {
+                const token = this.$state.token;
+                return url + token.substring(token.indexOf('?'));
+            }
+        },
+        watch: {
+            thumbnail(url) {
+                this.setThumbUrl(this.src(url));
+            }
+        },
+        mounted() {
+            this.setThumb(this.file);
+        }
+    }
+</script>
