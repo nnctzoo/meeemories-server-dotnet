@@ -11,7 +11,7 @@ namespace Meeemories.Controllers
     {
         [FunctionName("Favicon")]
         public static IActionResult Run(
-            [HttpTrigger(AuthorizationLevel.Function, "get", Route = "/favicon.ico")] HttpRequest req,
+            [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "/favicon.ico")] HttpRequest req,
             ILogger log)
         {
             var stream = File.OpenRead($"wwwroot/favicon.ico");

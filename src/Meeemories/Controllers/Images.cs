@@ -11,7 +11,7 @@ namespace Meeemories.Controllers
     {
         [FunctionName("Images")]
         public static IActionResult Run(
-            [HttpTrigger(AuthorizationLevel.Function, "get", Route = "img/{file}")] HttpRequest req,
+            [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "img/{file}")] HttpRequest req,
             string file,
             ILogger log)
         {

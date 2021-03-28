@@ -11,7 +11,7 @@ namespace Meeemories.Controllers
     {
         [FunctionName("Robots")]
         public static IActionResult Run(
-            [HttpTrigger(AuthorizationLevel.Function, "get", Route = "/robots.txt")] HttpRequest req,
+            [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "/robots.txt")] HttpRequest req,
             ILogger log)
         {
             var stream = File.OpenRead($"wwwroot/robots.txt");

@@ -11,7 +11,7 @@ namespace Meeemories.Controllers
     {
         [FunctionName("ManifestJson")]
         public static IActionResult Run(
-            [HttpTrigger(AuthorizationLevel.Function, "get", Route = "/manifest.json")] HttpRequest req,
+            [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "/manifest.json")] HttpRequest req,
             ILogger log)
         {
             var stream = File.OpenRead($"wwwroot/manifest.json");

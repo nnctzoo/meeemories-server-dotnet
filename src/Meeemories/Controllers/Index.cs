@@ -11,7 +11,7 @@ namespace Meeemories.Controllers
     {
         [FunctionName("Index")]
         public static IActionResult Run(
-            [HttpTrigger(AuthorizationLevel.Function, "get", Route = "/")] HttpRequest req,
+            [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "/")] HttpRequest req,
             ILogger log)
         {
             var stream = File.OpenRead($"wwwroot/index.html");

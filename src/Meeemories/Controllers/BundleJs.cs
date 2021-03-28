@@ -11,7 +11,7 @@ namespace Meeemories.Controllers
     {
         [FunctionName("BundleJs")]
         public static IActionResult Run(
-            [HttpTrigger(AuthorizationLevel.Function, "get", Route = "bundle.js")] HttpRequest req,
+            [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "bundle.js")] HttpRequest req,
             ILogger log)
         {
             var stream = File.OpenRead($"wwwroot/bundle.js");
