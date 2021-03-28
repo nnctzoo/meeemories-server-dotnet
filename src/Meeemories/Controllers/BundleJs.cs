@@ -14,7 +14,7 @@ namespace Meeemories.Controllers
             [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "bundle.js")] HttpRequest req,
             ILogger log)
         {
-            var stream = File.OpenRead($"wwwroot/bundle.js");
+            var stream = File.OpenRead(StaticFiles.Path($"wwwroot/bundle.js"));
 
             return new FileStreamResult(stream, "text/javascript");
         }

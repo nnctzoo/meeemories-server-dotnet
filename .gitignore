@@ -264,3 +264,4 @@ __pycache__/
 *.pyc
 src/Meeemories/wwwroot/bundle.js
 src/Meeemories/wwwroot/bundle.js.map
+/src/Meeemories/wwwroot/bundle.js.LICENSE.txt

@@ -14,7 +14,7 @@ namespace Meeemories.Controllers
             [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "/")] HttpRequest req,
             ILogger log)
         {
-            var stream = File.OpenRead($"wwwroot/index.html");
+            var stream = File.OpenRead(StaticFiles.Path($"wwwroot/index.html"));
 
             return new FileStreamResult(stream, "text/html");
         }

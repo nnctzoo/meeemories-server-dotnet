@@ -42,7 +42,7 @@ namespace Meeemories.Functions
                 var raw = _service.OpenBlob(media);
                 await raw.DownloadToFileAsync(rawPath, FileMode.OpenOrCreate);
 
-                var ffmpeg = new Engine();
+                var ffmpeg = new Engine(StaticFiles.Path("ffmpeg.exe"));
                 var inputFile = new MediaFile(rawPath);
                 var jpgFile = new MediaFile(jpgPah);
                 var thumbFile = new MediaFile(thumbPah);

@@ -41,6 +41,10 @@
        MatchExpression="\$CACHE_NAME\$"/>
   </Target>
 
+  <Target Name="NpmInstall" AfterTargets="Restore">
+    <Exec WorkingDirectory="ClientApp" Command="npm install" />
+  </Target>
+
   <Target Name="NpmWatch" BeforeTargets="Build" Condition="'$(Configuration)'=='Debug'">
     <Exec WorkingDirectory="ClientApp" Command="npm run watch" />
   </Target>
@@ -49,10 +53,14 @@
     <Exec WorkingDirectory="ClientApp" Command="npm run publish" />
   </Target>
 
-  <Target Name="NpmInstall" AfterTargets="Restore">
-    <Exec WorkingDirectory="ClientApp" Command="npm install" />
-  </Target>
-
+  <!--<Target Name="MoveAssets" AfterTargets="AfterPublish">
+    <ItemGroup>
+      <AssetFiles Include="$(OutputPath)publish/wwwroot/**/*.*"/>
+    </ItemGroup>
+    <Move SourceFiles="$(OutputPath)publish/ffmpeg.exe" DestinationFolder="$(OutputPath)publish/bin"/>
+    <Move SourceFiles="@(AssetFiles)" DestinationFiles="@(AssetFiles->'$(OutputPath)publish/bin/wwwroot/%(RecursiveDir)%(Filename)%(Extension)')"/>
+  </Target>-->
+  
   <UsingTask
     TaskName="ReplaceFileText"
     TaskFactory="RoslynCodeTaskFactory"

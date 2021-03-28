@@ -14,7 +14,7 @@ namespace Meeemories.Controllers
             [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "/robots.txt")] HttpRequest req,
             ILogger log)
         {
-            var stream = File.OpenRead($"wwwroot/robots.txt");
+            var stream = File.OpenRead(StaticFiles.Path($"wwwroot/robots.txt"));
 
             return new FileStreamResult(stream, "text/plain");
         }

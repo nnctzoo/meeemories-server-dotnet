@@ -14,7 +14,7 @@ namespace Meeemories.Controllers
             [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "/favicon.ico")] HttpRequest req,
             ILogger log)
         {
-            var stream = File.OpenRead($"wwwroot/favicon.ico");
+            var stream = File.OpenRead(StaticFiles.Path("wwwroot/favicon.ico"));
 
             return new FileStreamResult(stream, "image/vnd.microsoft.icon");
         }

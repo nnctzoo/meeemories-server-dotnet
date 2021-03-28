@@ -14,7 +14,7 @@ namespace Meeemories.Controllers
             [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "/service-worker.js")] HttpRequest req,
             ILogger log)
         {
-            var stream = File.OpenRead($"wwwroot/service-worker.js");
+            var stream = File.OpenRead(StaticFiles.Path($"wwwroot/service-worker.js"));
 
             return new FileStreamResult(stream, "text/javascript");
         }

@@ -14,7 +14,7 @@ namespace Meeemories.Controllers
             [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "/manifest.json")] HttpRequest req,
             ILogger log)
         {
-            var stream = File.OpenRead($"wwwroot/manifest.json");
+            var stream = File.OpenRead(StaticFiles.Path($"wwwroot/manifest.json"));
 
             return new FileStreamResult(stream, "application/json");
         }

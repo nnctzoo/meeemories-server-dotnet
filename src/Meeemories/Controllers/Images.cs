@@ -15,7 +15,7 @@ namespace Meeemories.Controllers
             string file,
             ILogger log)
         {
-            var stream = File.OpenRead($"wwwroot/img/{file}");
+            var stream = File.OpenRead(StaticFiles.Path($"wwwroot/img/{file}"));
 
             return new FileStreamResult(stream, "application/octet-stream");
         }

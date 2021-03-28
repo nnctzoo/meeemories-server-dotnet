@@ -15,7 +15,7 @@ namespace Meeemories.Controllers
             string file,
             ILogger log)
         {
-            var stream = File.OpenRead($"wwwroot/fonts/{file}");
+            var stream = File.OpenRead(StaticFiles.Path($"wwwroot/fonts/{file}"));
 
             return new FileStreamResult(stream, "application/octet-stream");
         }
