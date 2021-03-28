@@ -1,0 +1,36 @@
+name: release
+
+on:
+  release:
+    types: [published]
+jobs:
+  release:
+    runs-on: windows-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Setup .NET Core
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 3.1.407
+        node-version: 14.x
+    - name: Build electron
+      working-directory: ./src/Meeemories
+      run: dotnet publish -c Release
+    - name: Packaging
+      working-directory: ./src/Meeemories/bin/Release/netcoreapp3.1/publish
+      shell: pwsh
+      run: Compress-Archive -Path ./src/Meeemories/bin/Release/netcoreapp3.1/publish/* -DestinationPath Meeemories.zip
+    - name: Get upload URL
+      id: geturl
+      run: |
+         upload_url=$(curl -sL https://api.github.com/repos/${{github.repository}}/releases/${{github.event.release.tag_name}}?access_token=${{ secrets.GITHUB_TOKEN }} | jq -r '.upload_url')
+         echo ::set-output name=upload_url::$upload_url
+    - name: Upload
+      uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.geturl.outputs.upload_url }}
+          asset_path: ./Meeemories.zip
+          asset_name: Meeemories.zip
+          asset_content_type: application/zip

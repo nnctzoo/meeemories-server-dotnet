@@ -1,0 +1,19 @@
+name: build
+
+on:
+  push:
+    branches: [ master ]
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Setup .NET Core
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 3.1.407
+        node-version: 14.x
+    - name: Build electron
+      working-directory: ./src/Meeemories
+      run: dotnet build
