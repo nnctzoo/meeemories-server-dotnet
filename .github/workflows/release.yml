@@ -13,11 +13,10 @@ jobs:
       with:
         dotnet-version: 3.1.407
         node-version: 14.x
-    - name: Build electron
+    - name: Build
       working-directory: ./src/Meeemories
       run: dotnet publish -c Release
     - name: Packaging
-      working-directory: ./src/Meeemories/bin/Release/netcoreapp3.1/publish
       shell: pwsh
       run: Compress-Archive -Path ./src/Meeemories/bin/Release/netcoreapp3.1/publish/* -DestinationPath Meeemories.zip
     - name: Get upload URL

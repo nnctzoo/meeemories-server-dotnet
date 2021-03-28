@@ -14,6 +14,6 @@ jobs:
       with:
         dotnet-version: 3.1.407
         node-version: 14.x
-    - name: Build electron
+    - name: Build
       working-directory: ./src/Meeemories
       run: dotnet build
