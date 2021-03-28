@@ -9,7 +9,7 @@
     export default {
         data() {
             return {
-                password: 'password',
+                password: null,
                 message: null
             }
         },
