@@ -132,6 +132,7 @@ export const actions = {
         try {
             const response = await fetch(url, {
                 method: 'get',
+                mode: 'cors',
                 headers: {
                     'Cache-Control': 'no-cache'
                 }
