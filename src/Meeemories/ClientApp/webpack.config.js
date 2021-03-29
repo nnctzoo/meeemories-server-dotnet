@@ -8,8 +8,7 @@ module.exports = function (env, argv) {
         devtool: env.production ? 'source-map' : 'eval',
         entry: './src/app.js',
         output: {
-            path: env.watch ? path.resolve(__dirname, '../bin/Debug/netcoreapp3.1/wwwroot')
-                            : path.resolve(__dirname, '../wwwroot'),
+            path: path.resolve(__dirname, '../wwwroot'),
             filename: "bundle.js"
         },
         module: {
