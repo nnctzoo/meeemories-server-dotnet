@@ -45,8 +45,8 @@
                     const video = document.createElement('video');
                     const snap = () => {
                         const canvas = document.createElement('canvas');
-                        canvas.width = 64;
-                        canvas.height = 64;
+                        canvas.width = 128;
+                        canvas.height = 128;
                         canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height);
                         var url = canvas.toDataURL();
                         var success = url.length > 1000;
