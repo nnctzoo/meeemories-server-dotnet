@@ -11,7 +11,7 @@ export const router = new VueRouter({
     mode: 'hash',
     routes: [
         { path: '/', name: 'home', component: Home },
-        { path: '/login', name: 'login', component: Login },
+        { path: '/login', name: 'login', component: Login, meta: { naked: true } },
         { path: '/mypage', name: 'mypage', component: MyPage },
         { path: '/popup', name: 'popup', component: Popup },
     ],

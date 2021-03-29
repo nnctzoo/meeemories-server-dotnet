@@ -1,12 +1,12 @@
 ﻿<template>
     <div class="app" :class="{'app--grid-view': grid, 'app--selecting': selecting}">
-        <header class="app__header">
+        <header class="app__header" v-if="!$route.meta.naked">
             <Logo></Logo>
         </header>
         <main class="app__main" data-target="app.main">
             <router-view></router-view>
         </main>
-        <footer class="app__footer">
+        <footer class="app__footer" v-if="!$route.meta.naked">
             <ul class="actions">
                 <li class="actions__space"></li>
                 <li class="actions__item" @click="go('/')">
@@ -26,13 +26,15 @@
                 <li class="actions__space"></li>
             </ul>
         </footer>
+        <Help></Help>
     </div>
 </template>
 <script>
     import Logo from './components/Logo.vue';
+    import Help from './components/Help.vue';
     export default {
         components: {
-            Logo
+            Logo, Help
         },
         computed: {
             grid() {

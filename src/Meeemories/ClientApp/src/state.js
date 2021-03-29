@@ -12,10 +12,11 @@ export const state = Vue.observable({
     medias: [],
     selects:[],
     popup: null,
+    help: true,
     token: localStorage.getItem('token'),
     mobile: android || ios,
     android,
-    ios
+    ios,
 })
 
 window.addEventListener('scroll', function () {
@@ -39,6 +40,9 @@ export const actions = {
     },
     popup(media) {
         state.popup = media;
+    },
+    help(flag) {
+        state.help = flag;
     },
     async upload(file) {
         const id = unique(file.name);

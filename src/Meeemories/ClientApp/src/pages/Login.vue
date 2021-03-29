@@ -1,8 +1,9 @@
 ﻿<template>
-    <section>
-        <p>{{message}}</p>
-        <input type="text" v-model="password" />
-        <button @click="login">Login</button>
+    <section id="login">
+        <img src="/img/mstile-150x150.png"/>
+        <p class="error" v-if="message">{{message}}</p>
+        <input class="input" type="text" v-model="password" placeholder="合言葉"/>
+        <button class="btn btn-primary" @click="login">ログイン</button>
     </section>
 </template>
 <script>
@@ -31,7 +32,7 @@
                     this.$router.push('/');
                 }
                 else {
-                    this.message = 'パスワードが違います。';
+                    this.message = '合言葉が違います。';
                     console.error(text);
                 }
             }

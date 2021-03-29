@@ -54,7 +54,7 @@
             },
             beforeDownload(evt) {
                 if (this.$state.mobile) {
-                    alert('ダウンロードボタンを長押しして「リンク先をダウンロード」を選択してください。');
+                    this.$actions.help(true);
                     evt.preventDefault(); 
                 }
             },
