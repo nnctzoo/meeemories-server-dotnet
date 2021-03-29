@@ -3,12 +3,16 @@ const TerserPlugin = require('terser-webpack-plugin');
 const { VueLoaderPlugin } = require("vue-loader");
 
 module.exports = function (env, argv) {
+    console.log(env, argv)
+    console.log(`watch: ${argv.watch}`);
+    console.log(`mode: ${argv.mode}`);
     return {
-        mode: env.production ? 'production' : 'development',
-        devtool: env.production ? 'source-map' : 'eval',
+        mode: argv.mode,
+        devtool: argv.mode == 'production' ? 'source-map' : 'eval',
         entry: './src/app.js',
         output: {
-            path: path.resolve(__dirname, '../wwwroot'),
+            path: argv.watch ? path.resolve(__dirname, '../bin/Debug/netcoreapp3.1/wwwroot')
+                             : path.resolve(__dirname, '../wwwroot'),
             filename: "bundle.js"
         },
         module: {
