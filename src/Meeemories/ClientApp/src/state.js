@@ -12,7 +12,7 @@ export const state = Vue.observable({
     medias: [],
     selects:[],
     popup: null,
-    help: true,
+    help: false,
     token: localStorage.getItem('token'),
     mobile: android || ios,
     android,
