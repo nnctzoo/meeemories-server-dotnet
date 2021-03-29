@@ -26,15 +26,13 @@
                 <li class="actions__space"></li>
             </ul>
         </footer>
-        <Popup></Popup>
     </div>
 </template>
 <script>
     import Logo from './components/Logo.vue';
-    import Popup from './components/Popup.vue';
     export default {
         components: {
-            Logo, Popup
+            Logo
         },
         computed: {
             grid() {

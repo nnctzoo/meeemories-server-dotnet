@@ -60,6 +60,7 @@
         methods: {
             close() {
                 this.$actions.popup(null);
+                this.$router.go(-1);
             },
             onLoad() {
                 this.loaded = true;
@@ -67,6 +68,11 @@
             src(url) {
                 const token = this.$state.token;
                 return url + token.substring(token.indexOf('?'));
+            }
+        },
+        mounted() {
+            if (this.media == null) {
+                return this.$router.push('/');
             }
         }
     }

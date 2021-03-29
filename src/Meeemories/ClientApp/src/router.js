@@ -3,6 +3,7 @@ import VueRouter from 'vue-router'
 import Home from './pages/Home.vue'
 import Login from './pages/Login.vue'
 import MyPage from './pages/MyPage.vue'
+import Popup from './pages/Popup.vue'
 
 Vue.use(VueRouter)
 
@@ -12,6 +13,7 @@ export const router = new VueRouter({
         { path: '/', name: 'home', component: Home },
         { path: '/login', name: 'login', component: Login },
         { path: '/mypage', name: 'mypage', component: MyPage },
+        { path: '/popup', name: 'popup', component: Popup },
     ],
     scrollBehavior(to, from, savedPosition) {
         return savedPosition ? savedPosition : { x: 0, y: 0 }
