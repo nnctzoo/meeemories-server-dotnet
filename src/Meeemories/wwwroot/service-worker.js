@@ -31,10 +31,7 @@ self.addEventListener('fetch', (event) => {
     if (event.request.method.toUpperCase() !== 'GET') {
         return;
     }
-    
-    if (event.request.method.toUpperCase() !== 'OPTIONS') {
-        return;
-    }
+
     if (event.request.headers.get('Cache-Control') === 'no-cache') {
         return;
     }
