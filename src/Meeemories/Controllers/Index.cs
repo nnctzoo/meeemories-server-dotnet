@@ -14,6 +14,8 @@ namespace Meeemories.Controllers
             [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "/")] HttpRequest req,
             ILogger log)
         {
+            req.HttpContext.Response.Headers["Cache-Control"] = "no-cache";
+
             var stream = File.OpenRead(StaticFiles.Path($"wwwroot/index.html"));
 
             return new FileStreamResult(stream, "text/html");
