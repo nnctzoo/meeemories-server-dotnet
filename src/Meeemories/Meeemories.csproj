@@ -43,7 +43,6 @@
 
   <Target Name="NpmInstall" AfterTargets="Restore">
     <Exec WorkingDirectory="ClientApp" Command="npm install" />
-    <Exec WorkingDirectory="ClientApp" Command="npm run publish" />
   </Target>
 
   <Target Name="NpmWatch" BeforeTargets="Build" Condition="'$(Configuration)'=='Debug'">
