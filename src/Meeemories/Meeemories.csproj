@@ -11,6 +11,7 @@
     <PackageReference Include="Magick.NET-Q16-AnyCPU" Version="7.23.3" />
     <PackageReference Include="Microsoft.Azure.Functions.Extensions" Version="1.1.0" />
     <PackageReference Include="Microsoft.Azure.WebJobs.Extensions.Storage" Version="3.0.10" />
+    <PackageReference Include="Microsoft.Extensions.Http" Version="3.1.13" />
     <PackageReference Include="Microsoft.NET.Sdk.Functions" Version="3.0.11" />
     <PackageReference Include="xFFmpeg.NET" Version="3.4.0" />
   </ItemGroup>
@@ -35,17 +36,11 @@
   </ItemGroup>
 
   <Target Name="ChangeCacheKey" AfterTargets="Build">
-    <ReplaceFileText
-       InputFilename="$(OutputPath)wwwroot/service-worker.js"
-       OutputFilename="$(OutputPath)wwwroot/service-worker.js"
-       MatchExpression="\$CACHE_NAME\$"/>
+    <ReplaceFileText InputFilename="$(OutputPath)wwwroot/service-worker.js" OutputFilename="$(OutputPath)wwwroot/service-worker.js" MatchExpression="\$CACHE_NAME\$" />
   </Target>
 
   <Target Name="ChangeCacheKey" AfterTargets="Publish">
-    <ReplaceFileText
-       InputFilename="$(OutputPath)publish/wwwroot/service-worker.js"
-       OutputFilename="$(OutputPath)publish/wwwroot/service-worker.js"
-       MatchExpression="\$CACHE_NAME\$"/>
+    <ReplaceFileText InputFilename="$(OutputPath)publish/wwwroot/service-worker.js" OutputFilename="$(OutputPath)publish/wwwroot/service-worker.js" MatchExpression="\$CACHE_NAME\$" />
   </Target>
 
   <Target Name="NpmInstall" AfterTargets="Restore">
@@ -60,18 +55,15 @@
     <Exec WorkingDirectory="ClientApp" Command="npm run publish" />
   </Target>
   
-  <UsingTask
-    TaskName="ReplaceFileText"
-    TaskFactory="RoslynCodeTaskFactory"
-    AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.Core.dll">
+  <UsingTask TaskName="ReplaceFileText" TaskFactory="RoslynCodeTaskFactory" AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.Core.dll">
     <ParameterGroup>
       <InputFilename ParameterType="System.String" Required="true" />
       <OutputFilename ParameterType="System.String" Required="true" />
       <MatchExpression ParameterType="System.String" Required="true" />
     </ParameterGroup>
     <Task>
-      <Using Namespace="System"/>
-      <Using Namespace="System.IO"/>
+      <Using Namespace="System" />
+      <Using Namespace="System.IO" />
       <Using Namespace="System.Text.RegularExpressions" />
       <Code Type="Fragment" Language="cs">
         <![CDATA[  
