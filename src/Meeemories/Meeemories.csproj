@@ -71,7 +71,7 @@
         <![CDATA[  
           File.WriteAllText(
             OutputFilename,
-            Regex.Replace(File.ReadAllText(InputFilename), MatchExpression, DateTimeOffset.Now.ToString("o"))
+            Regex.Replace(File.ReadAllText(InputFilename), MatchExpression, DateTimeOffset.Now.Ticks.ToString())
             );
         ]]>
       </Code>
