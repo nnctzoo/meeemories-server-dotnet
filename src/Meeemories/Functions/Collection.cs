@@ -22,6 +22,7 @@ namespace Meeemories.Functions
             string id,
             ILogger log)
         {
+            req.HttpContext.Response.Headers["Cache-Control"] = "no-cache";
             if (string.IsNullOrEmpty(id))
             {
                 var skipToken = req.Query["skipToken"];
