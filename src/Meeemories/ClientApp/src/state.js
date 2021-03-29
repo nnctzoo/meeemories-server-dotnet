@@ -129,13 +129,18 @@ export const actions = {
         if (!token)
             return false;
         const url = token.replace('?', '/check.txt?');
-        const response = await fetch(url, {
-            method: 'get',
-            headers: {
-                'Cache-Control': 'no-cache'
-            }
-        });
-        return response.ok;
+        try {
+            const response = await fetch(url, {
+                method: 'get',
+                headers: {
+                    'Cache-Control': 'no-cache'
+                }
+            });
+            return response.ok;
+        }
+        catch {
+            return false;
+        }
     }
 }
 
