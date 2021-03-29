@@ -4,7 +4,7 @@
         <img class="media-item__thumb" @click="onClick"  ref="thumb">
         <img class="media-item__cover" :style="coverStyle" @click="onClick">
         <i class="media-item__type material-icons" @click="onClick" v-if="info.type=='Video'">play_circle_outline</i>
-        <a class="media-item__download material-icons" :href="src(info.url)" :download="short(info.id)">cloud_download</a>
+        <a class="media-item__download material-icons" :href="src(info.url)" :download="short(info.id)" @click="beforeDownload">cloud_download</a>
     </div>
 </template>
 <script>
@@ -47,9 +47,16 @@
         methods: {
             onClick() {
                 this.$actions.popup(this.info);
+                this.$router.push('/popup');
             },
             onLoad() {
                 this.loaded = true;
+            },
+            beforeDownload(evt) {
+                if (this.$state.mobile) {
+                    alert('ダウンロードボタンを長押しして「リンク先をダウンロード」を選択してください。');
+                    evt.preventDefault(); 
+                }
             },
             tryVisualize(pos) {
                 const viewportBottom = pos;

@@ -1,18 +1,25 @@
 ﻿import Vue from 'vue'
 import { ContainerClient } from '@azure/storage-blob'
 
+const ua = window.navigator.userAgent.toLowerCase();
+const android = ua.indexOf('android') != -1;
+const ios = ua.indexOf('ios') != -1 || ua.indexOf('ipod') != -1 || ua.indexOf('ipad') != -1 || (ua.indexOf('macintosh') != -1 && 'ontouchend' in document);
+
 export const state = Vue.observable({
-    scroll: 0,
+    scroll: window.scrollY + window.innerHeight,
     grid: false,
     uploads: [],
     medias: [],
     selects:[],
     popup: null,
     token: localStorage.getItem('token'),
+    mobile: android || ios,
+    android,
+    ios
 })
 
 window.addEventListener('scroll', function () {
-    state.scroll = window.scrollY + window.innerHeight;
+    state.scroll = window.scrollY + window.innerHeight
 })
 
 export const actions = {
@@ -55,6 +62,7 @@ export const actions = {
             await blockBlobClient.uploadData(file, {
                 blobHTTPHeaders: {
                     blobContentType: file.type,
+                    blobContentDisposition: 'attachment;'
                 },
                 onProgress: function (progress) {
                     uploading.progress = ~~(progress.loadedBytes / totalBytes * 100)
@@ -98,7 +106,7 @@ export const actions = {
                         polling();
 
                     if (status == 'complete')
-                        uploading.thumbnail = datum.sources.find(src => src.mimeType.startsWith('image')).url;
+                        uploading.thumbnail = datum.sources.find(src => src.width > 400 && src.mimeType.startsWith('image')).url;
                 }
             }, 2000);
         }
