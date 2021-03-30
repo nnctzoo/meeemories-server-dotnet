@@ -79,19 +79,25 @@ export const actions = {
             throw err;
         }
         try {
-            await fetch('/api/upload', {
+            const response = await fetch('/api/upload', {
                 method: 'post',
                 headers: {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({ id })
             })
+            if (response.ok) {
+                uploading.status = 'uploaded';
+                const datum = response.json();
+                uploading.deleteToken = datum.deleteToken;
+                localStorage.setItem('uploads', JSON.stringify(state.uploads));
+            }
         }
         catch (err) {
-            console.error(err);
+            state.uploads.splice(state.uploads.indexOf(uploading), 1);
+            throw err;
         }
 
-        uploading.status = 'uploaded';
 
         const polling = () => {
             setTimeout(async () => {

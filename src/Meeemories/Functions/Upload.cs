@@ -28,9 +28,9 @@ namespace Meeemories.Functions
             dynamic data = JsonConvert.DeserializeObject(requestBody);
             string id = data?.id;
 
-            await _service.AddAsync(id);
+            var media = await _service.AddAsync(id);
 
-            return new CreatedResult($"/api/medias/{Uri.EscapeUriString(id)}", null);
+            return new CreatedResult($"/api/medias/{Uri.EscapeUriString(id)}", media);
         }
     }
 }

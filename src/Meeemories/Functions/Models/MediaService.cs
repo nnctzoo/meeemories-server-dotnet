@@ -75,7 +75,7 @@ namespace Meeemories.Functions.Models
 
         public async Task<IEnumerable<Media>> ListAsync(string skipToken)
         {
-            var max = 5;
+            var max = 20;
             var result = new List<Media>();
             var query = new TableQuery<Media>().Where(TableQuery.CombineFilters(
                     TableQuery.CombineFilters(
