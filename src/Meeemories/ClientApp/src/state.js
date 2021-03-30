@@ -117,7 +117,7 @@ export const actions = {
                         polling();
 
                     if (status == 'complete') {
-                        uploading.thumbnail = datum.sources.find(src => src.width > 400 && src.mimeType.startsWith('image')).url;
+                        uploading.thumbnail = datum.sources.find(src => src.width >= 400 && src.mimeType.startsWith('image')).url;
                         uploading.deleteToken = datum.deleteToken;
                         localStorage.setItem('uploads', JSON.stringify(state.uploads));
                     }
