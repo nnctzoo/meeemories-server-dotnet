@@ -9,6 +9,7 @@
                        :progress="item.progress" 
                        :status="item.status" 
                        :thumbnail="item.thumbnail"
+                       :deletable="!!item.deleteToken"
                        :file="item.file"></UploadingItem>
     </section>
 </template>
@@ -21,6 +22,14 @@
         computed: {
             uploads() {
                 return this.$state.uploads;
+            }
+        },
+        async mounted() {
+            if (!await this.$actions.authorize()) {
+                this.$router.push('/login');
+            }
+            else {
+                this.$actions.load();
             }
         }
     }

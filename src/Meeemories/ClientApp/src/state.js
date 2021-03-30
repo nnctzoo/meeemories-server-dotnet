@@ -8,7 +8,7 @@ const ios = ua.indexOf('ios') != -1 || ua.indexOf('ipod') != -1 || ua.indexOf('i
 export const state = Vue.observable({
     scroll: window.scrollY + window.innerHeight,
     grid: false,
-    uploads: [],
+    uploads: JSON.parse(localStorage.getItem('uploads') || '[]'),
     medias: [],
     selects:[],
     popup: null,
@@ -52,6 +52,7 @@ export const actions = {
             progress: 0,
             status: 'uploading',
             thumbnail: null,
+            deleteToken: null,
         })
 
         state.uploads.unshift(uploading);
@@ -109,14 +110,34 @@ export const actions = {
                     if (status != 'complete' && status != 'fail')
                         polling();
 
-                    if (status == 'complete')
+                    if (status == 'complete') {
                         uploading.thumbnail = datum.sources.find(src => src.width > 400 && src.mimeType.startsWith('image')).url;
+                        uploading.deleteToken = datum.deleteToken;
+                        localStorage.setItem('uploads', JSON.stringify(state.uploads));
+                    }
                 }
             }, 2000);
         }
 
         polling();
         
+    },
+    async delete(id) {
+        const item = state.uploads.find(item => item.id == id);
+        if (!item) {
+            console.error('cannot delete ' + id);
+            return false;
+        }
+        const response = await fetch('/api/delete/' + id + '?token=' + item.deleteToken, {
+            method: 'delete',
+        });
+        if (response.ok || response.status == 404) {
+            const index = state.uploads.indexOf(item);
+            state.uploads.splice(index, 1);
+            localStorage.setItem('uploads', JSON.stringify(state.uploads));
+            return true;
+        }
+        return false;
     },
     async load() {
         let url = '/api/medias/';

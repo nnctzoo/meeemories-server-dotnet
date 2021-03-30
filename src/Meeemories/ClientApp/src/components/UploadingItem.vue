@@ -7,17 +7,18 @@
             <li><span>リサイズ</span></li>
             <li><span>投稿完了</span></li>
         </ul>
-        <!-- <button class="uploading-item__remove" data-action="uploading-item#remove"><i class="material-icons">delete</i></button> -->
+         <button class="uploading-item__remove" @click="remove" v-if="deletable"><i class="material-icons">delete</i></button> 
     </div>
 </template>
 <script>
     export default {
         props: {
             id: String,
-            file: File,
+            file: [File, Object],
             progress: Number,
             status: String,
-            thumbnail: String
+            thumbnail: String,
+            deletable: Boolean
         },
         computed: {
             klass() {
@@ -81,6 +82,14 @@
             src(url) {
                 const token = this.$state.token;
                 return url + token.substring(token.indexOf('?'));
+            },
+            async remove() {
+                if (confirm('この写真を削除します。')) {
+                    const success = await this.$actions.delete(this.id);
+                    if (!success) {
+                        alert('削除に失敗しました。');
+                    }
+                }
             }
         },
         watch: {
@@ -89,7 +98,11 @@
             }
         },
         mounted() {
-            this.setThumb(this.file);
+            if (this.thumbnail)
+                this.setThumbUrl(this.src(this.thumbnail));
+
+            else if (this.file)
+                this.setThumb(this.file);
         }
     }
 </script>
