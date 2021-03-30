@@ -4,6 +4,7 @@ using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
+using System;
 
 namespace Meeemories.Controllers
 {
@@ -15,6 +16,7 @@ namespace Meeemories.Controllers
             ILogger log)
         {
             req.HttpContext.Response.Headers["Cache-Control"] = "no-cache";
+            req.HttpContext.Response.Headers["Expires"] = DateTime.UtcNow.AddMinutes(1).ToString("R");
 
             var stream = File.OpenRead(StaticFiles.Path($"wwwroot/index.html"));
 
