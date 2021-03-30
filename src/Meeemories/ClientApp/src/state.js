@@ -139,10 +139,11 @@ export const actions = {
         }
         return false;
     },
-    async load() {
+    async load(next) {
         let url = '/api/medias/';
-        if (state.medias.length > 0)
-            url += '?skipToken=' + state.medias[0].id;
+
+        if (next && state.medias.length > 0)
+            url += '?skipToken=' + state.medias[state.medias.length - 1].id;
 
         const response = await fetch(url, {
             method: 'get',
@@ -150,10 +151,11 @@ export const actions = {
                 'Cache-Control': 'no-cache'
             }
         });
+
         if (response.ok) {
             const data = await response.json();
-            for (let datum of data) {
-                state.medias.unshift(datum);
+            while (data.length > 0) {
+                state.medias.unshift(data.pop());
             }
         }
     },
@@ -179,7 +181,7 @@ export const actions = {
 }
 
 function unique(filename) {
-    return new Date().getTime() + '-' + uuid() + '-' + filename
+    return (Number.MAX_SAFE_INTEGER - new Date().getTime()) + '-' + uuid() + '-' + filename
 }
 
 function uuid() {
