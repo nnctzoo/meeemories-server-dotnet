@@ -23,7 +23,7 @@
             klass() {
                 return {
                     'uploading-item': true,
-                    'uploading-item--uploaded': this.status === 'uploading',
+                    'uploading-item--uploading': this.status === 'uploading',
                     'uploading-item--uploaded': this.status === 'uploaded',
                     'uploading-item--converting': this.status === 'converting',
                     'uploading-item--succeeded': this.status === 'complete',
