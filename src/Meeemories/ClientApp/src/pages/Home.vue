@@ -32,6 +32,7 @@
                 this.$router.push('/login');
             }
             else {
+                await this.$actions.load();
                 new IntersectionObserver(entries => {
                     for (let entry of entries) {
                         if (entry.isIntersecting) {

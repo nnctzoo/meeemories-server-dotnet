@@ -154,8 +154,11 @@ export const actions = {
 
         if (response.ok) {
             const data = await response.json();
-            while (data.length > 0) {
-                state.medias.unshift(data.pop());
+            if (next) {
+                while (data.length > 0) state.medias.push(data.shift());
+            } else {
+                state.medias.splice(0);
+                while (data.length > 0) state.medias.unshift(data.pop());
             }
         }
     },

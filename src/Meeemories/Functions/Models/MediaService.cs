@@ -75,6 +75,7 @@ namespace Meeemories.Functions.Models
 
         public async Task<IEnumerable<Media>> ListAsync(string skipToken)
         {
+            var max = 5;
             var result = new List<Media>();
             var query = new TableQuery<Media>().Where(TableQuery.CombineFilters(
                     TableQuery.CombineFilters(
@@ -84,14 +85,14 @@ namespace Meeemories.Functions.Models
                     ),
                     TableOperators.And,
                     TableQuery.GenerateFilterCondition("StatusStr", QueryComparisons.Equal, MediaStatus.Complete.ToString())
-                )).Take(100);
+                )).Take(max);
             TableContinuationToken ct = null;
             do
             {
                 var response = await _table.ExecuteQuerySegmentedAsync(query, ct);
                 result.AddRange(response.Results);
                 ct = response.ContinuationToken;
-            } while (ct != null);
+            } while (result.Count < max && ct != null);
             return result;
         }
 

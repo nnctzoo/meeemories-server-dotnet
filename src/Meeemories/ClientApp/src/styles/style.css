@@ -683,7 +683,7 @@ input[type="file"] {
     }
 
 .app__description {
-    display: none;
+    display: block;
     font-size: 14px;
     line-height: 24px;
     text-align: center;
@@ -698,10 +698,6 @@ input[type="file"] {
         justify-content: center;
         margin: 16px;
     }
-
-.app--empty-myupload .app__description {
-    display: block;
-}
 
 .help {
     position: fixed;
