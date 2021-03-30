@@ -247,6 +247,7 @@ body {
     text-align: center;
     text-decoration: none;
     line-height: 30px;
+    user-select:none;
 }
 
 .media-item:hover .media-item__select,
@@ -736,6 +737,7 @@ input[type="file"] {
 
     .help__message img {
         margin: auto;
+        max-width: 100%;
     }
 
     .help__message .material-icons {
