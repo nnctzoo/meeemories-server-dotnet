@@ -65,7 +65,7 @@ export const actions = {
         try {
             await blockBlobClient.uploadData(file, {
                 blobHTTPHeaders: {
-                    blobContentType: file.type,
+                    blobContentType: 'application/download',
                     blobContentDisposition: 'attachment;'
                 },
                 onProgress: function (progress) {
