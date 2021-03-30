@@ -35,12 +35,12 @@
     </None>
   </ItemGroup>
 
-  <Target Name="ChangeCacheKey" AfterTargets="Build">
+  <Target Name="ChangeCacheKeyBuild" AfterTargets="Build">
     <ReplaceFileText InputFilename="$(OutputPath)wwwroot/service-worker.js" OutputFilename="$(OutputPath)wwwroot/service-worker.js" MatchExpression="\$CACHE_NAME\$" />
     <ReplaceFileText InputFilename="$(OutputPath)wwwroot/index.html" OutputFilename="$(OutputPath)wwwroot/index.html" MatchExpression="\$CACHE_BUSTER\$" />
   </Target>
 
-  <Target Name="ChangeCacheKey" AfterTargets="Publish">
+  <Target Name="ChangeCacheKeyPublish" AfterTargets="Publish">
     <ReplaceFileText InputFilename="$(OutputPath)publish/wwwroot/service-worker.js" OutputFilename="$(OutputPath)publish/wwwroot/service-worker.js" MatchExpression="\$CACHE_NAME\$" />
     <ReplaceFileText InputFilename="$(OutputPath)publish/wwwroot/index.html" OutputFilename="$(OutputPath)publish/wwwroot/index.html" MatchExpression="\$CACHE_BUSTER\$" />
   </Target>
