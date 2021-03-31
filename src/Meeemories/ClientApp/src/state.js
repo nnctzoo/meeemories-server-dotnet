@@ -97,36 +97,46 @@ export const actions = {
             state.uploads.splice(state.uploads.indexOf(uploading), 1);
             throw err;
         }
+        this.startPolling(id);
+    },
+    startPolling(id) {
+        const handle = setInterval(async () => {
+            if (!await this.polling(id)) {
+                clearInterval(handle);
+            }
+        }, 2000);
+    },
+    async polling(id) {
+        const uploading = state.uploads.find(o => o.id == id);
+        if (uploading.status == 'uploading' || uploading.status == 'complete' || uploading.status == 'fail')
+            return true;
 
+        const response = await fetch('/api/medias/' + id, {
+            method: 'get',
+            headers: {
+                'Cache-Control': 'no-cache'
+            }
+        });
 
-        const polling = () => {
-            setTimeout(async () => {
-                const response = await fetch('/api/medias/' + id, {
-                    method: 'get',
-                    headers: {
-                        'Cache-Control': 'no-cache'
-                    }
-                });
-                if (response.ok) {
-                    const datum = await response.json();
-                    const status = datum.status.toLowerCase();
-                    if (uploading.status != status)
-                        uploading.status = status;
+        if (!response.ok)
+            return false
 
-                    if (status != 'complete' && status != 'fail')
-                        polling();
+        const datum = await response.json();
+        const status = datum.status.toLowerCase();
+        if (uploading.status != status)
+            uploading.status = status;
 
-                    if (status == 'complete') {
-                        uploading.thumbnail = datum.sources.find(src => src.width >= 400 && src.mimeType.startsWith('image')).url;
-                        uploading.deleteToken = datum.deleteToken;
-                        localStorage.setItem('uploads', JSON.stringify(state.uploads));
-                    }
-                }
-            }, 2000);
+        if (status == 'fail')
+            return true;
+
+        if (status == 'complete') {
+            uploading.thumbnail = datum.sources.find(src => src.width >= 400 && src.mimeType.startsWith('image')).url;
+            uploading.deleteToken = datum.deleteToken;
+            localStorage.setItem('uploads', JSON.stringify(state.uploads));
+            return true;
         }
 
-        polling();
-        
+        return false;
     },
     async delete(id) {
         const item = state.uploads.find(item => item.id == id);

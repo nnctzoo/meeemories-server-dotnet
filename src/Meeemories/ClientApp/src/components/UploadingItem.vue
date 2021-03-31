@@ -98,10 +98,12 @@
             }
         },
         mounted() {
+            this.$actions.startPolling(this.id);
+
             if (this.thumbnail)
                 this.setThumbUrl(this.src(this.thumbnail));
 
-            else if (this.file)
+            else if (this.file.constructor == Object)
                 this.setThumb(this.file);
         }
     }
