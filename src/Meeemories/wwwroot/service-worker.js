@@ -26,46 +26,4 @@ self.addEventListener('activate', (event) => {
     );
 });
 
-self.addEventListener('fetch', (event) => {
-    if (event.request.method.toUpperCase() !== 'GET') {
-        return;
-    }
-
-    if (event.request.headers.get('Cache-Control') === 'no-cache') {
-        return;
-    }
-
-    const cacheKey = event.request.url;
-    event.respondWith(
-        caches.match(cacheKey)
-            .then((response) => {
-                if (response) {
-                    return response;
-                }
-
-                return fetch(event.request)
-                    .then((response) => {
-                        if (!response)
-                            return response;
-
-                        if (response.status !== 200)
-                            return response;
-
-                        if (response.type !== 'basic' && response.type !== 'cors' && response.type !== 'opaque')
-                            return response;
-
-                        if (response.headers.get('Cache-Control') === 'no-cache')
-                            return response;
-
-                        let responseToCache = response.clone();
-
-                        caches.open(CACHE_NAME)
-                            .then((cache) => {
-                                cache.put(cacheKey, responseToCache);
-                            });
-
-                        return response;
-                    });
-            })
-    );
-});
+self.addEventListener('fetch', () => {});
