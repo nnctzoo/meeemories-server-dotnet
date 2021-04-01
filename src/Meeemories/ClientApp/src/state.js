@@ -97,17 +97,16 @@ export const actions = {
             state.uploads.splice(state.uploads.indexOf(uploading), 1);
             throw err;
         }
-        this.startPolling(id);
+        this.startPolling(uploading);
     },
-    startPolling(id) {
+    startPolling(uploading) {
         const handle = setInterval(async () => {
-            if (!await this.polling(id)) {
+            if (!await this.polling(uploading)) {
                 clearInterval(handle);
             }
         }, 2000);
     },
-    async polling(id) {
-        const uploading = state.uploads.find(o => o.id == id);
+    async polling(uploading) {
         if (uploading.status == 'uploading' || uploading.status == 'complete' || uploading.status == 'fail')
             return true;
 
@@ -197,6 +196,10 @@ export const actions = {
             return false;
         }
     }
+}
+
+for (let uploading of state.uploads) {
+    actions.startPolling(uploading);
 }
 
 function unique(filename) {
