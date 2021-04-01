@@ -155,6 +155,18 @@
             "resources": []
         },
         {
+            "name": "[parameters('storageAccountName')]",
+            "type": "Microsoft.Storage/storageAccounts/queueServices",
+            "apiVersion": "2019-06-01",
+            "properties": {},
+            "resources": []
+        },
+        {
+            "name": "[parameters('storageAccountName')]",
+            "type": "Microsoft.Storage/storageAccounts/tableServices/tables",
+            "apiVersion": "2019-06-01"
+        },
+        {
             "type": "Microsoft.OperationalInsights/workspaces",
             "name": "[parameters('name')]",
             "apiVersion": "2020-08-01",
