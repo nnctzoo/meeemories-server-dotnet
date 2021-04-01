@@ -35,6 +35,7 @@ namespace Meeemories.Functions.Models
         [JsonProperty("type")]
         public string MediaTypeStr { get; set; } = MediaType.Image.ToString();
 
+        [JsonIgnore]
         public string DeleteToken { get; set; }
 
         public string Url { get; set; }
