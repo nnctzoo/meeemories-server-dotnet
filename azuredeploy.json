@@ -1,0 +1,131 @@
+{
+    "$schema": "http://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "name": {
+            "type": "string"
+        },
+        "hostingPlanName": {
+            "type": "string"
+        },
+        "insightsName": {
+            "type": "string"
+        },
+        "storageAccountName": {
+            "type": "string"
+        },
+        "location": {
+            "type": "string"
+        },
+        "password": {
+            "type": "string"
+        }
+    },
+    "resources": [
+        {
+            "apiVersion": "2018-11-01",
+            "name": "[parameters('name')]",
+            "type": "Microsoft.Web/sites",
+            "kind": "functionapp",
+            "location": "[parameters('location')]",
+            "tags": {},
+            "dependsOn": [
+                "[concat('microsoft.insights/components/', parameters('insightsName'))]",
+                "[concat('Microsoft.Web/serverfarms/', parameters('hostingPlanName'))]",
+                "[concat('Microsoft.Storage/storageAccounts/', parameters('storageAccountName'))]"
+            ],
+            "properties": {
+                "name": "[parameters('name')]",
+                "siteConfig": {
+                    "appSettings": [
+                        {
+                            "name": "FUNCTIONS_EXTENSION_VERSION",
+                            "value": "~3"
+                        },
+                        {
+                            "name": "FUNCTIONS_WORKER_RUNTIME",
+                            "value": "dotnet"
+                        },
+                        {
+                            "name": "APPINSIGHTS_INSTRUMENTATIONKEY",
+                            "value": "[reference(concat('microsoft.insights/components/', parameters('insightsName')), '2015-05-01').InstrumentationKey]"
+                        },
+                        {
+                            "name": "APPLICATIONINSIGHTS_CONNECTION_STRING",
+                            "value": "[reference(concat('microsoft.insights/components/', parameters('insightsName')), '2015-05-01').ConnectionString]"
+                        },
+                        {
+                            "name": "AzureWebJobsStorage",
+                            "value": "[concat('DefaultEndpointsProtocol=https;AccountName=',parameters('storageAccountName'),';AccountKey=',listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName')), '2019-06-01').keys[0].value,';EndpointSuffix=','core.windows.net')]"
+                        },
+                        {
+                            "name": "WEBSITE_RUN_FROM_PACKAGE",
+                            "value": "https://github.com/nnctzoo/meeemories-server-dotnet/releases/latest/download/Meeemories.zip"
+                        },
+                        {
+                            "name": "Meeemories:ContainerName",
+                            "value": "uploads"
+                        },
+                        {
+                            "name": "Meeemories:Password",
+                            "value": "[parameters('password')]"
+                        },
+                        {
+                            "name": "Meeemories:ExpiredMunites",
+                            "value": "60"
+                        }
+                    ],
+                    "use32BitWorkerProcess": "[parameters('use32BitWorkerProcess')]",
+                    "alwaysOn": true
+                },
+                "serverFarmId": "[concat('/subscriptions/', subscription().subscriptionId,'/resourcegroups/', resourceGroup().name, '/providers/Microsoft.Web/serverfarms/', parameters('hostingPlanName'))]",
+                "clientAffinityEnabled": false
+            }
+        },
+        {
+            "apiVersion": "2018-11-01",
+            "name": "[parameters('hostingPlanName')]",
+            "type": "Microsoft.Web/serverfarms",
+            "location": "[parameters('location')]",
+            "kind": "",
+            "tags": {},
+            "dependsOn": [],
+            "properties": {
+                "name": "[parameters('hostingPlanName')]"
+            },
+            "sku": {
+                "Tier": "Basic",
+                "Name": "B1"
+            }
+        },
+        {
+            "apiVersion": "2020-02-02-preview",
+            "name": "[parameters('insightsName')]",
+            "type": "microsoft.insights/components",
+            "location": "[parameters('location')]",
+            "tags": {},
+            "dependsOn": [],
+            "properties": {
+                "ApplicationId": "[parameters('name')]",
+                "Request_Source": "IbizaWebAppExtensionCreate",
+                "Flow_Type": "Redfield",
+                "Application_Type": "web",
+                "WorkspaceResourceId": "[concat('/subscriptions/', subscription().subscriptionId,'/resourcegroups/', resourceGroup().name, '/providers/microsoft.operationalinsights/workspaces/', parameters('name'))]",
+            }
+        },
+        {
+            "apiVersion": "2019-06-01",
+            "type": "Microsoft.Storage/storageAccounts",
+            "name": "[parameters('storageAccountName')]",
+            "location": "[parameters('location')]",
+            "tags": {},
+            "sku": {
+                "name": "Standard_ZRS"
+            },
+            "properties": {
+                "supportsHttpsTrafficOnly": true,
+                "minimumTlsVersion": "TLS1_2"
+            }
+        }
+    ]
+}
