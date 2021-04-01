@@ -30,7 +30,7 @@ namespace Meeemories.Functions
 
             var media = await _service.AddAsync(id);
 
-            return new CreatedResult($"/api/medias/{Uri.EscapeUriString(id)}", media);
+            return new CreatedResult($"/api/medias/{Uri.EscapeUriString(id)}", new { media.DeleteToken });
         }
     }
 }
