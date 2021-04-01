@@ -8,7 +8,7 @@ const ios = ua.indexOf('ios') != -1 || ua.indexOf('ipod') != -1 || ua.indexOf('i
 export const state = Vue.observable({
     scroll: window.scrollY + window.innerHeight,
     grid: false,
-    uploads: JSON.parse(localStorage.getItem('uploads') || '[]'),
+    uploads: JSON.parse(localStorage.getItem('uploads') || '[]').filter(o => o.status != 'uploading'),
     medias: [],
     selects:[],
     popup: null,
@@ -48,12 +48,25 @@ export const actions = {
         const id = unique(file.name);
         const uploading = Vue.observable({
             id,
-            file,
             progress: 0,
             status: 'uploading',
             thumbnail: null,
             deleteToken: null,
         })
+
+        if (file.type.startsWith('image/')) {
+            extractThumbnailFromImage(file).then(url => {
+                uploading.thumbnail = url;
+                localStorage.setItem('uploads', JSON.stringify(state.uploads));
+            });
+        }
+
+        if (file.type.startsWith('video/')) {
+            extractThumbnailFromVideo(file).then(url => {
+                uploading.thumbnail = url;
+                localStorage.setItem('uploads', JSON.stringify(state.uploads));
+            });
+        }
 
         state.uploads.unshift(uploading);
 
@@ -87,7 +100,7 @@ export const actions = {
                 body: JSON.stringify({ id })
             })
             if (response.ok) {
-                uploading.status = 'uploaded';
+                uploading.status = 'ready';
                 const datum = response.json();
                 uploading.deleteToken = datum.deleteToken;
                 localStorage.setItem('uploads', JSON.stringify(state.uploads));
@@ -101,7 +114,7 @@ export const actions = {
     },
     startPolling(uploading) {
         const handle = setInterval(async () => {
-            if (!await this.polling(uploading)) {
+            if (await this.polling(uploading)) {
                 clearInterval(handle);
             }
         }, 2000);
@@ -110,7 +123,7 @@ export const actions = {
         if (uploading.status == 'uploading' || uploading.status == 'complete' || uploading.status == 'fail')
             return true;
 
-        const response = await fetch('/api/medias/' + id, {
+        const response = await fetch('/api/medias/' + uploading.id, {
             method: 'get',
             headers: {
                 'Cache-Control': 'no-cache'
@@ -130,7 +143,6 @@ export const actions = {
 
         if (status == 'complete') {
             uploading.thumbnail = datum.sources.find(src => src.width >= 400 && src.mimeType.startsWith('image')).url;
-            uploading.deleteToken = datum.deleteToken;
             localStorage.setItem('uploads', JSON.stringify(state.uploads));
             return true;
         }
@@ -217,4 +229,49 @@ function uuid() {
         uuid += (i == 12 ? 4 : (i == 16 ? (random & 3 | 8) : random)).toString(16);
     }
     return uuid;
+}
+
+function extractThumbnailFromImage(file) {
+    return new Promise(function (resolve) {
+        const img = new Image();
+        img.onload = function () {
+            const canvas = document.createElement('canvas');
+            const aspect = img.height / img.width;
+            canvas.width = 400;
+            canvas.height = 400 * aspect;
+            canvas.getContext('2d').drawImage(img, 0, 0, canvas.width, canvas.height);
+            resolve(canvas.toDataURL());
+        }
+        img.src = URL.createObjectURL(file);
+    });
+}
+
+function extractThumbnailFromVideo(file) {
+    return new Promise(function (resolve) {
+        const video = document.createElement('video');
+        const snap = () => {
+            const aspect = video.videoHeight / video.videoWidth;
+            const canvas = document.createElement('canvas');
+            canvas.width = 400;
+            canvas.height = 400 * aspect;
+            canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height);
+            const url = canvas.toDataURL();
+            const success = url.length > 1000;
+            return success ? url : null;
+        }
+        function timeupdate() {
+            const url = snap();
+            if (url) {
+                video.removeEventListener('timeupdate', timeupdate);
+                video.pause();
+                resolve(url);
+            }
+        }
+        video.addEventListener('timeupdate', timeupdate);
+        video.preload = 'metadata';
+        video.src = URL.createObjectURL(file);
+        video.muted = true;
+        video.playsInline = true;
+        video.play();
+    });
 }
