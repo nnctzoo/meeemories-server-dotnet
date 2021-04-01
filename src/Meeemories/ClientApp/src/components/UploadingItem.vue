@@ -98,8 +98,6 @@
             }
         },
         mounted() {
-            this.$actions.startPolling(this.id);
-
             if (this.thumbnail)
                 this.setThumbUrl(this.src(this.thumbnail));
 
