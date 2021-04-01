@@ -72,7 +72,7 @@
                             "value": "60"
                         }
                     ],
-                    "use32BitWorkerProcess": "[parameters('use32BitWorkerProcess')]",
+                    "use32BitWorkerProcess": true,
                     "alwaysOn": true
                 },
                 "serverFarmId": "[concat('/subscriptions/', subscription().subscriptionId,'/resourcegroups/', resourceGroup().name, '/providers/Microsoft.Web/serverfarms/', parameters('hostingPlanName'))]",
