@@ -101,7 +101,7 @@ export const actions = {
             })
             if (response.ok) {
                 uploading.status = 'ready';
-                const datum = response.json();
+                const datum = await response.json();
                 uploading.deleteToken = datum.deleteToken;
                 localStorage.setItem('uploads', JSON.stringify(state.uploads));
             }
