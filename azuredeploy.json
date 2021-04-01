@@ -125,6 +125,36 @@
             }
         },
         {
+            "name": "[parameters('storageAccountName')]",
+            "type": "Microsoft.Storage/storageAccounts/blobServices",
+            "apiVersion": "2018-07-01",
+            "properties": {
+              "cors": {
+                "corsRules": [
+                  {
+                    "allowedOrigins": [
+                      "[concat('https://',parameters('name'),'.azurewebsites.net')]"
+                    ],
+                    "allowedMethods": [
+                      "GET","OPTIONS","PUT"
+                    ],
+                    "maxAgeInSeconds": 0,
+                    "exposedHeaders": [
+                    ],
+                    "allowedHeaders": [
+                      "cache-control","content-type","x-ms-*"
+                    ]
+                  }
+                ]
+              },
+              "defaultServiceVersion": "string",
+              "deleteRetentionPolicy": {
+                "enabled": false
+              }
+            },
+            "resources": []
+        },
+        {
             "type": "Microsoft.OperationalInsights/workspaces",
             "name": "[parameters('name')]",
             "apiVersion": "2020-08-01",
