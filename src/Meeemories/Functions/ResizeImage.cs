@@ -30,37 +30,34 @@ namespace Meeemories.Functions
 
             media.Status = MediaStatus.Converting;
             await _service.UpdateAsync(media);
+            var raw = _service.OpenBlob(media);
+            var rawPath = Path.GetTempFileName();
+            await raw.DownloadToFileAsync(rawPath, FileMode.OpenOrCreate);
 
             async Task<MediaSource> Convert(Media media, int width)
             {
-                var raw = _service.OpenBlob(media);
                 var blob = _service.CreateBlob($"{width:000}w/{raw.Name}.jpg");
-                using (var stream = new MemoryStream())
+                using var stream = File.OpenRead(rawPath);
+                using var image = new MagickImage(stream);
+                    
+                var aspect = (double)image.Height / image.Width;
+                var height = (int)(aspect * width);
+                image.Resize(width, height);
+                image.Format = MagickFormat.Jpeg;
+                image.Quality = 85;
+
+                var binary = image.ToByteArray();
+                await blob.UploadFromByteArrayAsync(binary, 0, binary.Length);
+                blob.Properties.ContentType = "image/jpeg";
+                await blob.SetPropertiesAsync();
+
+                return new MediaSource
                 {
-                    await raw.DownloadToStreamAsync(stream);
-                    stream.Position = 0;
-                    using (var image = new MagickImage(stream))
-                    {
-                        var aspect = (double)image.Height / image.Width;
-                        var height = (int)(aspect * width);
-                        image.Resize(width, height);
-                        image.Format = MagickFormat.Jpeg;
-                        image.Quality = 85;
-
-                        var binary = image.ToByteArray();
-                        await blob.UploadFromByteArrayAsync(binary, 0, binary.Length);
-                        blob.Properties.ContentType = "image/jpeg";
-                        await blob.SetPropertiesAsync();
-
-                        return new MediaSource
-                        {
-                            Url = blob.Uri.ToString(),
-                            Width = width,
-                            Height = height,
-                            MimeType = "image/jpeg"
-                        };
-                    }
-                }
+                    Url = blob.Uri.ToString(),
+                    Width = width,
+                    Height = height,
+                    MimeType = "image/jpeg"
+                };
             }
 
             try
