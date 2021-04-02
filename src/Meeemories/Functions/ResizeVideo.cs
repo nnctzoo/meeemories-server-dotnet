@@ -33,8 +33,8 @@ namespace Meeemories.Functions
             await _service.UpdateAsync(media);
 
             var rawPath = Path.GetTempFileName();
-            var jpgPah = $"{rawPath}.jpg";
-            var thumbPah = $"{rawPath}_thumb.jpg";
+            var jpgPath = $"{rawPath}.jpg";
+            var thumbPath = $"{rawPath}_thumb.jpg";
             var resizedPath = $"{rawPath}_resized.mp4";
 
             try
@@ -44,8 +44,8 @@ namespace Meeemories.Functions
 
                 var ffmpeg = new Engine(StaticFiles.Path("ffmpeg.exe"));
                 var inputFile = new MediaFile(rawPath);
-                var jpgFile = new MediaFile(jpgPah);
-                var thumbFile = new MediaFile(thumbPah);
+                var jpgFile = new MediaFile(jpgPath);
+                var thumbFile = new MediaFile(thumbPath);
                 var resizedFile = new MediaFile(resizedPath);
 
                 await ffmpeg.GetThumbnailAsync(inputFile, jpgFile, new ConversionOptions
@@ -54,7 +54,7 @@ namespace Meeemories.Functions
                 });
 
                 double aspect;
-                using (var image = new MagickImage(jpgPah))
+                using (var image = new MagickImage(jpgPath))
                 {
                     aspect = (double)image.Height / image.Width;
                 }
@@ -77,10 +77,10 @@ namespace Meeemories.Functions
 
                 var sources = new List<MediaSource>();
 
-                var thumbBlob = _service.CreateBlob($"{raw.Name}_thumb.jpg");
-                var resizedBlob = _service.CreateBlob($"{raw.Name}_resized.mp4");
+                var thumbBlob = _service.CreateBlob($"{width}w/{raw.Name}.jpg");
+                var resizedBlob = _service.CreateBlob($"{width}w/{raw.Name}.mp4");
 
-                await thumbBlob.UploadFromFileAsync(thumbPah);
+                await thumbBlob.UploadFromFileAsync(thumbPath);
                 thumbBlob.Properties.ContentType = "image/jpeg";
                 await thumbBlob.SetPropertiesAsync();
 
@@ -119,11 +119,11 @@ namespace Meeemories.Functions
                 if (File.Exists(rawPath))
                     File.Delete(rawPath);
 
-                if (File.Exists(jpgPah))
-                    File.Delete(jpgPah);
+                if (File.Exists(jpgPath))
+                    File.Delete(jpgPath);
 
-                if (File.Exists(thumbPah))
-                    File.Delete(thumbPah);
+                if (File.Exists(thumbPath))
+                    File.Delete(thumbPath);
 
                 if (File.Exists(resizedPath))
                     File.Delete(resizedPath);

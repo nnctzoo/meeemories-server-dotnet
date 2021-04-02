@@ -34,7 +34,7 @@ namespace Meeemories.Functions
             async Task<MediaSource> Convert(Media media, int width)
             {
                 var raw = _service.OpenBlob(media);
-                var blob = _service.CreateBlob($"{raw.Name}.{width:000}w.jpg");
+                var blob = _service.CreateBlob($"{width:000}w/{raw.Name}.jpg");
                 using (var stream = new MemoryStream())
                 {
                     await raw.DownloadToStreamAsync(stream);
