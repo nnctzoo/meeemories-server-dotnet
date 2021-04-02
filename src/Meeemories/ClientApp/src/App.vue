@@ -52,7 +52,8 @@
                 Promise.all(
                     Array.from(evt.target.files)
                         .map(file => this.$actions.upload(file))
-                ).catch(() => {
+                ).catch((err) => {
+                alert(JSON.stringify(err));
                     this.$router.push('/login');
                 });
 
