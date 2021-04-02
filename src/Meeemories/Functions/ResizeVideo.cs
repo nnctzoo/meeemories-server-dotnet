@@ -77,8 +77,8 @@ namespace Meeemories.Functions
 
                 var sources = new List<MediaSource>();
 
-                var thumbBlob = _service.CreateBlob($"{width}w/{raw.Name}.jpg");
-                var resizedBlob = _service.CreateBlob($"{width}w/{raw.Name}.mp4");
+                var thumbBlob = _service.CreateBlob($"{width:000}w/{raw.Name}.jpg");
+                var resizedBlob = _service.CreateBlob($"{width:000}w/{raw.Name}.mp4");
 
                 await thumbBlob.UploadFromFileAsync(thumbPath);
                 thumbBlob.Properties.ContentType = "image/jpeg";
