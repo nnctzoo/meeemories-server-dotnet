@@ -24,12 +24,6 @@ namespace Meeemories
             builder.Services.AddOptions<Settings>() .Configure<IConfiguration>((settings, configuration) =>
             {
                 configuration.GetSection("Meeemories").Bind(settings);
-                if (string.IsNullOrEmpty(settings.WakeupUrl))
-                {
-                    var host = configuration.GetValue<string>("WEBSITE_HOSTNAME");
-                    if (!string.IsNullOrEmpty(host))
-                        settings.WakeupUrl = $"http://{host}/api/medias/";
-                }
                 settings.ConnectionString = configuration.GetValue<string>("AzureWebJobsStorage");
             });
             builder.Services.AddSingleton<MediaService>();
