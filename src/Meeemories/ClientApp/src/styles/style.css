@@ -812,3 +812,19 @@ input[type="file"] {
     padding: 16px 8px;
     font-size: 16px;
 }
+
+.support {
+    width: 300px;
+    margin: auto;
+}
+.support caption {
+    margin-top: 48px;
+    margin-bottom: 8px;
+}
+.support th {
+    text-align: left;
+    width: 100px;
+}
+.support td:nth-of-type(1) {
+    text-align:left
+}
