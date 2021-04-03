@@ -7,20 +7,18 @@
             <img class="popup__image" :src="thumbnail.src" :srcset="thumbnail.srcset" :sizes="thumbnail.sizes" v-if="loaded">
             <img class="popup__image" :src="large.src" @load="onLoad" v-else>
         </template>
-        <template v-else-if="media.type=='Video' && !swipe">
-            <video class="popup__image" autoplay controls loop>
+        <template v-else-if="media.type=='Video'">
+            <video class="popup__image" autoplay controls loop ref="video">
                 <source :src="video.src" :type="video.mime" :media="video.media" v-for="(video, index) in videoSources" :key="index"/>
             </video>
         </template>
     </article>
 </template>
 <script>
-    import { nextTick } from 'vue';
     export default {
         data() {
             return {
-                loaded: false,
-                swipe: false
+                loaded: false
             }
         },
         computed: {
@@ -94,10 +92,6 @@
                             else {
                                 this.$actions.next();
                             }
-                            this.swipe = true;
-                            nextTick().then(() => {
-                                this.swipe = false;
-                            });
                         }
                         if (X < Y && Y * a > 8000) {
                             if (diff.y > 0) {
@@ -110,6 +104,15 @@
             src(url) {
                 const token = this.$state.token;
                 return url + token.substring(token.indexOf('?'));
+            }
+        },
+        watch: {
+            media(value, oldValue) {
+                if (value != null && oldValue != null && value.type == 'Video' && oldValue.type == 'Video') {
+                    this.$refs.video.pause();
+                    this.$refs.video.load();
+                    this.$refs.video.play();
+                }
             }
         },
         mounted() {
