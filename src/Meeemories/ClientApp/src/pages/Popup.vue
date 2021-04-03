@@ -8,7 +8,7 @@
             <img class="popup__image" :src="large.src" @load="onLoad" v-else>
         </template>
         <template v-else-if="media.type=='Video'">
-            <video class="popup__image" autoplay controls @touchstart="onTouchStart" @touchend="onTouchEnd">
+            <video class="popup__image" autoplay controls>
                 <source :src="video.src" :type="video.mime" :media="video.media" v-for="(video, index) in videoSources" :key="index"/>
             </video>
         </template>
@@ -85,7 +85,7 @@
                         const a = 500 / diff.time;
                         const X = diff.x * diff.x;
                         const Y = diff.y * diff.y;
-                        if (X > Y && X * a > 10000) {
+                        if (X > Y && X * a > 8000) {
                             if (diff.x > 0) {
                                 this.$actions.prev();
                             }
@@ -93,7 +93,7 @@
                                 this.$actions.next();
                             }
                         }
-                        if (X < Y && Y * a > 10000) {
+                        if (X < Y && Y * a > 8000) {
                             if (diff.y > 0) {
                                 this.close();
                             }
