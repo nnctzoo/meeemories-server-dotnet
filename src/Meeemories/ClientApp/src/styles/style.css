@@ -516,13 +516,21 @@ body {
     background: rgb(251, 0, 128);
 }
 
-.uploading-item--uploaded .uploading-item__indicator::before {
-    content: '';
-    position: absolute;
-    width: 32px;
-    height: 4px;
-    background: white;
-    animation: upload-item-indicator 1.5s infinite ease-in-out alternate;
+.uploading-item--uploaded .uploading-item__indicator {
+    background-color: rgb(251, 0, 128);
+    background-image: linear-gradient( -45deg, rgba(255, 255, 255, 0.5) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.5) 50%, rgba(255, 255, 255, 0.5) 75%, transparent 75%, transparent );
+    background-size: 50px 50px;
+    animation: move 2s linear infinite;
+}
+
+@keyframes move {
+    0% {
+        background-position: 0 0;
+    }
+
+    100% {
+        background-position: 50px 50px;
+    }
 }
 
 .uploading-item--converting .uploading-item__indicator::before {
