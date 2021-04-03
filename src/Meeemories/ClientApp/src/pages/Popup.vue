@@ -8,7 +8,7 @@
             <img class="popup__image" :src="large.src" @load="onLoad" v-else>
         </template>
         <template v-else-if="media.type=='Video'">
-            <video class="popup__image" autoplay controls>
+            <video class="popup__image" autoplay controls @touchstart="onTouchStart" @touchend="onTouchEnd">
                 <source :src="video.src" :type="video.mime" :media="video.media" v-for="(video, index) in videoSources" :key="index"/>
             </video>
         </template>
