@@ -2,7 +2,7 @@
     <section id="login">
         <img src="/img/mstile-150x150.png"/>
         <p class="error" v-if="message">{{message}}</p>
-        <input class="input" type="text" v-model="password" placeholder="合言葉"/>
+        <input class="input" type="text" v-model="password" @keyup.enter="trigger" placeholder="合言葉"/>
         <button class="btn btn-primary" @click="login">ログイン</button>
     </section>
 </template>
@@ -34,6 +34,11 @@
                 else {
                     this.message = '合言葉が違います。';
                     console.error(text);
+                }
+            },
+            trigger(evt) {
+                if (evt.keyCode == 13) {
+                    this.login();
                 }
             }
         }
