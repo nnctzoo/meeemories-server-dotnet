@@ -89,8 +89,11 @@ export const actions = {
         }
         catch (err) {
             state.uploads.splice(state.uploads.indexOf(uploading), 1);
-            console.error(err);
-            throw 'blob'
+
+            if (err && err.statusCode == '403')
+                throw "expired";
+
+            throw err;
         }
         try {
             const response = await fetch('/api/upload', {
@@ -109,8 +112,7 @@ export const actions = {
         }
         catch (err) {
             state.uploads.splice(state.uploads.indexOf(uploading), 1);
-            console.error(err);
-            throw 'upload';
+            throw err;
         }
         this.startPolling(uploading);
     },

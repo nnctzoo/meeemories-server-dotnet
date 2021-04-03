@@ -53,8 +53,12 @@
                     Array.from(evt.target.files)
                         .map(file => this.$actions.upload(file))
                 ).catch((err) => {
-                alert(JSON.stringify(err));
-                    this.$router.push('/login');
+                    if (err == 'expired') {
+                        this.$router.push('/login');
+                    }
+                    else {
+                        throw err;
+                    }
                 });
 
                 evt.target.value = '';
