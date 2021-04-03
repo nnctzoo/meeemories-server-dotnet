@@ -5,6 +5,7 @@ using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using System;
+using Microsoft.Extensions.Options;
 
 namespace Meeemories.Controllers
 {
@@ -13,9 +14,9 @@ namespace Meeemories.Controllers
         private readonly Settings _settings;
         private static string _html;
         private static object _lock = new object();
-        public Index(Settings settings)
+        public Index(IOptions<Settings> options)
         {
-            _settings = settings;
+            _settings = options.Value;
         }
 
         [FunctionName("Index")]
