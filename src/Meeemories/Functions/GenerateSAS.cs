@@ -46,7 +46,15 @@ namespace Meeemories.Functions
         {
             var containerClient = new BlobContainerClient(_settings.ConnectionString, _settings.ContainerName);
 
-            await containerClient.CreateIfNotExistsAsync();
+            try
+            {
+                await containerClient.CreateIfNotExistsAsync();
+            }
+            catch (Azure.RequestFailedException ex)
+            {
+                if (ex.Status != 409)
+                    throw;
+            }
 
             if (!containerClient.CanGenerateSasUri)
                 throw new NotSupportedException("cannot generate sas token");
