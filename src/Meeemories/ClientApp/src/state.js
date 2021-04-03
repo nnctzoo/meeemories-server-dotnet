@@ -96,24 +96,27 @@ export const actions = {
             throw err;
         }
         try {
-            const response = await fetch('/api/upload', {
+            const response = await fetch_retry('/api/upload', {
                 method: 'post',
                 headers: {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({ id })
-            })
-            if (response.ok) {
+            }, 3)
+            if (response.ok || response.statusCode == 409) {
                 uploading.status = 'ready';
                 const datum = await response.json();
                 uploading.deleteToken = datum.deleteToken;
-                localStorage.setItem('uploads', JSON.stringify(state.uploads));
             }
         }
         catch (err) {
             state.uploads.splice(state.uploads.indexOf(uploading), 1);
             throw err;
         }
+        try {
+            localStorage.setItem('uploads', JSON.stringify(state.uploads));
+        }
+        catch { }
         this.startPolling(uploading);
     },
     startPolling(uploading) {
@@ -217,6 +220,15 @@ export const actions = {
 for (let uploading of state.uploads) {
     actions.startPolling(uploading);
 }
+
+const fetch_retry = async (url, options, n) => {
+    try {
+        return await fetch(url, options);
+    } catch (err) {
+        if (n === 1) throw err;
+        return await fetch_retry(url, options, n - 1);
+    }
+};
 
 function unique(filename) {
     return (Number.MAX_SAFE_INTEGER - new Date().getTime()) + '-' + uuid() + '-' + filename

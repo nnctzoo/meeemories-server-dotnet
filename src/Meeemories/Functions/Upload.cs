@@ -28,6 +28,9 @@ namespace Meeemories.Functions
             dynamic data = JsonConvert.DeserializeObject(requestBody);
             string id = data?.id;
 
+            if (await _service.FindAsync(id) != null)
+                return new ConflictObjectResult(new { });
+
             var media = await _service.AddAsync(id);
 
             return new CreatedResult($"/api/medias/{Uri.EscapeUriString(id)}", new { media.DeleteToken });
