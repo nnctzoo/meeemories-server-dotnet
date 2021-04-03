@@ -8,19 +8,50 @@ using System;
 
 namespace Meeemories.Controllers
 {
-    public static class Index
+    public class Index
     {
+        private readonly Settings _settings;
+        private static string _html;
+        private static object _lock = new object();
+        public Index(Settings settings)
+        {
+            _settings = settings;
+        }
+
         [FunctionName("Index")]
-        public static IActionResult Run(
+        public IActionResult Run(
             [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "/")] HttpRequest req,
             ILogger log)
         {
             req.HttpContext.Response.Headers["Cache-Control"] = "no-cache";
             req.HttpContext.Response.Headers["Expires"] = DateTime.UtcNow.AddMinutes(1).ToString("R");
 
-            var stream = File.OpenRead(StaticFiles.Path($"wwwroot/index.html"));
+            var html = GetHtml(StaticFiles.Path($"wwwroot/index.html"));
 
-            return new FileStreamResult(stream, "text/html");
+            return new ContentResult
+            {
+                StatusCode = 200,
+                Content = html,
+                ContentType = "text/html"
+            };
+        }
+
+        public string GetHtml(string path)
+        {
+            if (!string.IsNullOrEmpty(_html))
+                return _html;
+
+            lock (_lock)
+            {
+                if (!string.IsNullOrEmpty(_html))
+                    return _html;
+
+                var html = File.ReadAllText(path);
+
+                _html = html.Replace("<!--extension-->", _settings.ExtensionHtml??string.Empty);
+                
+                return _html;
+            }
         }
     }
 }

@@ -89,7 +89,8 @@ export const actions = {
         }
         catch (err) {
             state.uploads.splice(state.uploads.indexOf(uploading), 1);
-            throw 'blob';
+            console.error(err);
+            throw 'blob'
         }
         try {
             const response = await fetch('/api/upload', {
@@ -108,7 +109,8 @@ export const actions = {
         }
         catch (err) {
             state.uploads.splice(state.uploads.indexOf(uploading), 1);
-            throw 'upload'
+            console.error(err);
+            throw 'upload';
         }
         this.startPolling(uploading);
     },
