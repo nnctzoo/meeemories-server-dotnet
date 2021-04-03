@@ -1,5 +1,5 @@
 ﻿<template>
-    <article class="popup" v-if="media!=null">
+    <article class="popup" v-if="media!=null" @touchstart="onTouchStart" @touchend="onTouchEnd">
         <button class="popup__close" @click="close">
             <i class="material-icons">arrow_back</i>
         </button>
@@ -64,6 +64,42 @@
             },
             onLoad() {
                 this.loaded = true;
+            },
+            onTouchStart(evt) {
+                if (evt.touches.length == 1) {
+                    this._touch = {
+                        time: new Date().getTime(),
+                        x: evt.touches[0].screenX,
+                        y: evt.touches[0].screenY,
+                    }
+                }
+            },
+            onTouchEnd(evt) {
+                if (evt.changedTouches.length == 1 && this._touch) {
+                    const diff = {
+                        time: new Date().getTime() - this._touch.time,
+                        x: evt.changedTouches[0].screenX - this._touch.x,
+                        y: evt.changedTouches[0].screenY - this._touch.y,
+                    }
+                    if (diff.time > 2 && diff.time < 500) {
+                        const a = 500 / diff.time;
+                        const X = diff.x * diff.x;
+                        const Y = diff.y * diff.y;
+                        if (X > Y && X * a > 10000) {
+                            if (diff.x > 0) {
+                                this.$actions.prev();
+                            }
+                            else {
+                                this.$actions.next();
+                            }
+                        }
+                        if (X < Y && Y * a > 10000) {
+                            if (diff.y > 0) {
+                                this.close();
+                            }
+                        }
+                    }
+                }
             },
             src(url) {
                 const token = this.$state.token;

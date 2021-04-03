@@ -39,7 +39,19 @@ export const actions = {
         }
     },
     popup(media) {
-        state.popup = media;
+         state.popup = media;
+    },
+    prev() {
+        const index = state.medias.indexOf(state.popup);
+        if (index > 0) {
+            actions.popup(state.medias[index - 1]);
+        }
+    },
+    next() {
+        const index = state.medias.indexOf(state.popup);
+        if (index != -1) {
+            actions.popup(state.medias[(index + 1) % state.medias.length]);
+        }
     },
     help(flag) {
         state.help = flag;
