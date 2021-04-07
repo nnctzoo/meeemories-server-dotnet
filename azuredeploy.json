@@ -125,7 +125,7 @@
                 "supportsHttpsTrafficOnly": true,
                 "minimumTlsVersion": "TLS1_2",
                 "accessTier": "Hot"
-            },
+            }
         },
         {
             "name": "default",
@@ -155,7 +155,10 @@
                 "enabled": false
               }
             },
-            "resources": []
+            "resources": [],
+            "dependsOn": [
+                "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName'))]"
+            ]
         },
         {
             "type": "Microsoft.OperationalInsights/workspaces",
