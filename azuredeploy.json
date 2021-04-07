@@ -125,39 +125,41 @@
                 "supportsHttpsTrafficOnly": true,
                 "minimumTlsVersion": "TLS1_2",
                 "accessTier": "Hot"
-            }
-        },
-        {
-            "name": "default",
-            "type": "Microsoft.Storage/storageAccounts/blobServices",
-            "apiVersion": "2018-07-01",
-            "properties": {
-              "cors": {
-                "corsRules": [
-                  {
-                    "allowedOrigins": [
-                      "[concat('https://',parameters('name'),'.azurewebsites.net')]"
-                    ],
-                    "allowedMethods": [
-                      "GET","OPTIONS","PUT"
-                    ],
-                    "maxAgeInSeconds": 0,
-                    "exposedHeaders": [
-                    ],
-                    "allowedHeaders": [
-                      "cache-control","content-type","x-ms-*"
-                    ]
-                  }
-                ]
-              },
-              "defaultServiceVersion": "string",
-              "deleteRetentionPolicy": {
-                "enabled": false
-              }
             },
-            "resources": [],
-            "dependsOn": [
-                "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName'))]"
+            resources: [
+                {
+                    "name": "default",
+                    "type": "blobServices",
+                    "apiVersion": "2018-07-01",
+                    "properties": {
+                      "cors": {
+                        "corsRules": [
+                          {
+                            "allowedOrigins": [
+                              "[concat('https://',parameters('name'),'.azurewebsites.net')]"
+                            ],
+                            "allowedMethods": [
+                              "GET","OPTIONS","PUT"
+                            ],
+                            "maxAgeInSeconds": 0,
+                            "exposedHeaders": [
+                            ],
+                            "allowedHeaders": [
+                              "cache-control","content-type","x-ms-*"
+                            ]
+                          }
+                        ]
+                      },
+                      "defaultServiceVersion": "string",
+                      "deleteRetentionPolicy": {
+                        "enabled": false
+                      }
+                    },
+                    "resources": [],
+                    "dependsOn": [
+                        "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName'))]"
+                    ]
+                }
             ]
         },
         {
