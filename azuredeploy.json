@@ -126,7 +126,7 @@
                 "minimumTlsVersion": "TLS1_2",
                 "accessTier": "Hot"
             },
-            resources: [
+            "resources": [
                 {
                     "name": "default",
                     "type": "blobServices",
