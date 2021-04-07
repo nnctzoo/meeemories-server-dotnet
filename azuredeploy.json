@@ -116,16 +116,19 @@
             "name": "[parameters('storageAccountName')]",
             "location": "[resourceGroup().location]",
             "tags": {},
+            "kind": "StorageV2",
             "sku": {
-                "name": "Standard_ZRS"
+                "name": "Standard_ZRS",
+                "tier": "Standard"
             },
             "properties": {
                 "supportsHttpsTrafficOnly": true,
-                "minimumTlsVersion": "TLS1_2"
-            }
+                "minimumTlsVersion": "TLS1_2",
+                "accessTier": "Hot"
+            },
         },
         {
-            "name": "[parameters('storageAccountName')]",
+            "name": "default",
             "type": "Microsoft.Storage/storageAccounts/blobServices",
             "apiVersion": "2018-07-01",
             "properties": {
@@ -153,18 +156,6 @@
               }
             },
             "resources": []
-        },
-        {
-            "name": "[parameters('storageAccountName')]",
-            "type": "Microsoft.Storage/storageAccounts/queueServices",
-            "apiVersion": "2019-06-01",
-            "properties": {},
-            "resources": []
-        },
-        {
-            "name": "[parameters('storageAccountName')]",
-            "type": "Microsoft.Storage/storageAccounts/tableServices/tables",
-            "apiVersion": "2019-06-01"
         },
         {
             "type": "Microsoft.OperationalInsights/workspaces",
