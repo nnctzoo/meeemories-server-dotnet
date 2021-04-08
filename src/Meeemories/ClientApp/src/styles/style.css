@@ -789,6 +789,33 @@ input[type="file"] {
         border: 1px solid #EA6264;
     }
 
+    .btn-loading {
+        position: relative;
+        color: transparent;
+    }
+        .btn-loading::after {
+            content: "";
+            display: block;
+            position: absolute;
+            top: 8px;
+            left: -12px;
+            margin-left: 50%;
+            width: 24px;
+            height: 24px;
+            box-sizing: border-box;
+            border: 4px dotted white;
+            border-radius: 50%;
+            animation: loading 2s linear infinite;
+        }
+@keyframes loading {
+    0% { 
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
 #login {
     display: flex;
     flex-direction: column;
