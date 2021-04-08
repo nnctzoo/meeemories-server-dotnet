@@ -116,55 +116,47 @@
             "name": "[parameters('storageAccountName')]",
             "location": "[resourceGroup().location]",
             "tags": {},
+            "kind": "StorageV2",
             "sku": {
-                "name": "Standard_ZRS"
+                "name": "Standard_ZRS",
+                "tier": "Standard"
             },
             "properties": {
                 "supportsHttpsTrafficOnly": true,
-                "minimumTlsVersion": "TLS1_2"
-            }
-        },
-        {
-            "name": "[parameters('storageAccountName')]",
-            "type": "Microsoft.Storage/storageAccounts/blobServices",
-            "apiVersion": "2018-07-01",
-            "properties": {
-              "cors": {
-                "corsRules": [
-                  {
-                    "allowedOrigins": [
-                      "[concat('https://',parameters('name'),'.azurewebsites.net')]"
-                    ],
-                    "allowedMethods": [
-                      "GET","OPTIONS","PUT"
-                    ],
-                    "maxAgeInSeconds": 0,
-                    "exposedHeaders": [
-                    ],
-                    "allowedHeaders": [
-                      "cache-control","content-type","x-ms-*"
-                    ]
-                  }
-                ]
-              },
-              "defaultServiceVersion": "string",
-              "deleteRetentionPolicy": {
-                "enabled": false
-              }
+                "minimumTlsVersion": "TLS1_2",
+                "accessTier": "Hot"
             },
-            "resources": []
-        },
-        {
-            "name": "[parameters('storageAccountName')]",
-            "type": "Microsoft.Storage/storageAccounts/queueServices",
-            "apiVersion": "2019-06-01",
-            "properties": {},
-            "resources": []
-        },
-        {
-            "name": "[parameters('storageAccountName')]",
-            "type": "Microsoft.Storage/storageAccounts/tableServices/tables",
-            "apiVersion": "2019-06-01"
+            "resources": [
+                {
+                    "name": "default",
+                    "type": "blobServices",
+                    "apiVersion": "2018-07-01",
+                    "properties": {
+                      "cors": {
+                        "corsRules": [
+                          {
+                            "allowedOrigins": [
+                              "[concat('https://',parameters('name'),'.azurewebsites.net')]"
+                            ],
+                            "allowedMethods": [
+                              "GET","OPTIONS","PUT"
+                            ],
+                            "maxAgeInSeconds": 0,
+                            "exposedHeaders": [
+                            ],
+                            "allowedHeaders": [
+                              "cache-control","content-type","x-ms-*"
+                            ]
+                          }
+                        ]
+                      }
+                    },
+                    "resources": [],
+                    "dependsOn": [
+                        "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName'))]"
+                    ]
+                }
+            ]
         },
         {
             "type": "Microsoft.OperationalInsights/workspaces",
