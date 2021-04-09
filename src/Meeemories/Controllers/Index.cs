@@ -49,7 +49,8 @@ namespace Meeemories.Controllers
 
                 var html = File.ReadAllText(path);
 
-                _html = html.Replace("<!--extension-->", _settings.ExtensionHtml??string.Empty);
+                _html = html.Replace("$version$", _settings.ContainerName)
+                            .Replace("<!--extension-->", _settings.ExtensionHtml??string.Empty);
                 
                 return _html;
             }

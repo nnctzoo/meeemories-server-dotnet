@@ -1,6 +1,8 @@
 ﻿import Vue from 'vue'
 import { ContainerClient } from '@azure/storage-blob'
 
+const version = document.querySelector('meta[name=x-version]').content;
+
 const ua = window.navigator.userAgent.toLowerCase();
 const android = ua.indexOf('android') != -1;
 const ios = ua.indexOf('ios') != -1 || ua.indexOf('ipod') != -1 || ua.indexOf('ipad') != -1 || (ua.indexOf('macintosh') != -1 && 'ontouchend' in document);
@@ -13,7 +15,7 @@ export const state = Vue.observable({
     selects:[],
     popup: null,
     help: false,
-    token: localStorage.getItem('token'),
+    token: localStorage.getItem('token:' + version),
     mobile: android || ios,
     android,
     ios,
@@ -55,6 +57,10 @@ export const actions = {
     },
     help(flag) {
         state.help = flag;
+    },
+    login(token) {
+        state.token = token;
+        localStorage.setItem('token:' + version, token);
     },
     async upload(file) {
         const id = unique(file.name);

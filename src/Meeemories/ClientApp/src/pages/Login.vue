@@ -39,8 +39,7 @@
                     if (response.ok) {
                         const token = JSON.parse(text);
                         this.message = null;
-                        this.$state.token = token;
-                        localStorage.setItem('token', token);
+                        this.$actions.login(token);
                         this.$router.push('/');
                     }
                     else {
