@@ -10,7 +10,7 @@ const ios = ua.indexOf('ios') != -1 || ua.indexOf('ipod') != -1 || ua.indexOf('i
 export const state = Vue.observable({
     scroll: window.scrollY + window.innerHeight,
     grid: false,
-    uploads: JSON.parse(localStorage.getItem('uploads') || '[]').filter(o => o.status != 'uploading'),
+    uploads: JSON.parse(localStorage.getItem('uploads:' + version) || '[]').filter(o => o.status != 'uploading'),
     medias: [],
     selects:[],
     popup: null,
@@ -75,14 +75,14 @@ export const actions = {
         if (file.type.startsWith('image/')) {
             extractThumbnailFromImage(file).then(url => {
                 uploading.thumbnail = url;
-                localStorage.setItem('uploads', JSON.stringify(state.uploads));
+                localStorage.setItem('uploads:' + version, JSON.stringify(state.uploads));
             });
         }
 
         if (file.type.startsWith('video/')) {
             extractThumbnailFromVideo(file).then(url => {
                 uploading.thumbnail = url;
-                localStorage.setItem('uploads', JSON.stringify(state.uploads));
+                localStorage.setItem('uploads:' + version, JSON.stringify(state.uploads));
             });
         }
 
@@ -132,7 +132,7 @@ export const actions = {
             throw err;
         }
         try {
-            localStorage.setItem('uploads', JSON.stringify(state.uploads));
+            localStorage.setItem('uploads:' + version, JSON.stringify(state.uploads));
         }
         catch { }
         this.startPolling(uploading);
@@ -168,7 +168,7 @@ export const actions = {
 
         if (status == 'complete') {
             uploading.thumbnail = datum.sources.find(src => src.width >= 400 && src.mimeType.startsWith('image')).url;
-            localStorage.setItem('uploads', JSON.stringify(state.uploads));
+            localStorage.setItem('uploads:' + version, JSON.stringify(state.uploads));
             return true;
         }
 
@@ -186,7 +186,7 @@ export const actions = {
         if (response.ok || response.status == 404) {
             const index = state.uploads.indexOf(item);
             state.uploads.splice(index, 1);
-            localStorage.setItem('uploads', JSON.stringify(state.uploads));
+            localStorage.setItem('uploads:' + version, JSON.stringify(state.uploads));
             return true;
         }
         return false;
