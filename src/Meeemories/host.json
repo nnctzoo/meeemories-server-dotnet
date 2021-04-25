@@ -9,6 +9,9 @@
     }
   },
   "extensions": {
+    "queues":{
+      "batchSize":8
+    },
     "http": {
       "routePrefix": ""
     } 
