@@ -9,7 +9,7 @@
     }
   },
   "extensions": {
-    "queues":{
+    "queues": {
       "batchSize":8
     },
     "http": {
