@@ -19,7 +19,7 @@ namespace Meeemories.Functions
         }
 
         [FunctionName("ResizeVideo")]
-        [Singleton]
+        //[Singleton]
         public async Task Run([QueueTrigger("video-%Meeemories:ContainerName%")]string id, ILogger log)
         {
             var media = await _service.FindAsync(id);
