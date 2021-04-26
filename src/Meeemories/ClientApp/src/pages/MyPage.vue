@@ -8,7 +8,8 @@
                 <tbody>
                     <tr><th>iPhone</th><td>Safari</td><td>〇</td></tr>
                     <tr><th>iPad</th><td>Safari</td><td>〇</td></tr>
-                    <tr><th>Android</th><td>Chrome</td><td>×</td></tr>
+                    <tr><th>Android</th><td>Chrome 90~</td><td>〇</td></tr>
+                    <tr><th>Android</th><td>Chrome ~89</td><td>×</td></tr>
                     <tr><th>Android</th><td>Firefox</td><td>〇</td></tr>
                     <tr><th>PC</th><td>Any</td><td>〇</td></tr>
                 </tbody>
