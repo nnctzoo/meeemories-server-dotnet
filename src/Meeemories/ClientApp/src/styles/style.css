@@ -855,3 +855,85 @@ input[type="file"] {
 .support td:nth-of-type(1) {
     text-align:left
 }
+
+.meet__remote {
+    position: absolute;
+    width: 100vw;
+    height: 100vh;
+    top: 0;
+    left: 0;
+    column-gap: 1em;
+    z-index: 100;
+    background: black;
+}
+.meet__remote video {
+    position: absolute;
+    width: 200px;
+    height: 200px;
+    object-fit: cover;
+    cursor: pointer;
+}
+.meet__remote video.active {
+    position: absolute;
+    width: 100vmin;
+    height: 100vmin;
+}
+.meet__local {
+    position: absolute;
+    z-index: 100;
+    top: 0;
+    margin: auto auto;
+}
+.meet__local video {
+    width: calc(100vmin - 64px);
+    height: calc(100vmin - 64px);
+    object-fit: cover;
+}
+.meet__local--float {
+    top: auto;
+    bottom: 16px;
+    left: 0;
+    right: 0;
+    gap: 16px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    width: 100%;
+}
+    .meet__local--float video {
+        width: 64px;
+        height: 64px;
+    }
+.meet__local__toolbar {
+    color: white;
+    font-size: 16px;
+    display: flex;
+    flex-direction:row;
+    justify-content: center;
+    align-items: center;
+}
+
+input[type=radio] {
+    width: 0;
+    height: 0;
+    margin: 0;
+    padding: 0;
+}
+    input[type=radio] + .text {
+        margin-right: 8px;
+    }
+    input[type=radio] + .text::before {
+        content: "";
+        border: 2px solid white;
+        border-radius: 50%;
+        box-sizing: border-box;
+        width: 16px;
+        height: 16px;
+        display: inline-block;
+        position: relative;
+        top: 2px;
+        margin-right: 4px;
+    }
+    input[type=radio]:checked + .text::before {
+        background: white;
+    }
