@@ -362,6 +362,17 @@ body {
     }
 }
 
+.app__live {
+    top: 160px;
+    right: 8px;
+}
+
+@media screen and (min-width: 960px) {
+    .app__live {
+        right: calc((100vw - 960px) / 2 + 8px);
+    }
+}
+
 .app--selecting .app__download {
     display: block;
 }
@@ -855,7 +866,15 @@ input[type="file"] {
 .support td:nth-of-type(1) {
     text-align:left
 }
-
+#meet {
+    position: absolute;
+    width: 100vw;
+    height: 100vh;
+    top: 0;
+    left: 0;
+    z-index: 9999;
+    background: black;
+}
 .meet__remote {
     position: absolute;
     width: 100vw;
@@ -863,8 +882,7 @@ input[type="file"] {
     top: 0;
     left: 0;
     column-gap: 1em;
-    z-index: 100;
-    background: black;
+    z-index: 1;
 }
 .meet__remote video {
     position: absolute;
@@ -880,9 +898,12 @@ input[type="file"] {
 }
 .meet__local {
     position: absolute;
-    z-index: 100;
-    top: 0;
-    margin: auto auto;
+    z-index: 1;
+    top: 50%;
+    margin-top: -50vmin;
+    left:0;
+    width: 100%;
+    text-align:center;
 }
 .meet__local video {
     width: calc(100vmin - 64px);
@@ -898,7 +919,6 @@ input[type="file"] {
     display: flex;
     flex-direction: row;
     justify-content: center;
-    width: 100%;
 }
     .meet__local--float video {
         width: 64px;

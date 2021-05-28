@@ -18,6 +18,9 @@
                 </div>
             </div>
         </div>
+        <button class="popup__close" @click="back">
+            <i class="material-icons">arrow_back</i>
+        </button>
     </section>
 </template>
 <script>
@@ -31,7 +34,7 @@
                 audioEnable: false,
                 selectedVideoDevice: null,
                 selectedAudioDevice: null,
-                joined: false
+                joined: false,
             }
         },
         computed: {
@@ -150,6 +153,11 @@
                         el.style.top = `${s * y}px`;
                     }
                 }
+            },
+            back() {
+                this.leaveRoom();
+                this.stopLocalStream();
+                this.$router.push('/');
             }
         },
         watch: {

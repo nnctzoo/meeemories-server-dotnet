@@ -6,6 +6,7 @@
         <div class="list__next" ref="next"></div>
         <button class="fab app__view-switch material-icons" @click="toggleView"></button>
         <button class="fab app__download material-icons" @click="download">cloud_download</button>
+        <button class="fab app__live" @click="$router.push('/meet')">LIVE</button>
     </section>
 </template>
 <script>

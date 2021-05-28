@@ -60,7 +60,7 @@
         methods: {
             close() {
                 this.$actions.popup(null);
-                this.$router.go(-1);
+                this.$router.push('/');
             },
             onLoad() {
                 this.loaded = true;
