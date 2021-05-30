@@ -4,8 +4,8 @@
         <div class="meet__local" :class="{'meet__local--float':joined}">
             <video ref="local" playsinline muted @click="openSettings"></video>
             <div class="meet__local__toolbar">
-                <label><input type="radio" name="mic" value="on" v-model="audioEnable" /><span class="text">マイク ON</span></label>
-                <label><input type="radio" name="mic" value="off" v-model="audioEnable" /><span class="text">マイク OFF</span></label>
+                <label><input type="radio" name="mic" value="true" v-model="audioEnable" /><span class="text">マイク ON</span></label>
+                <label><input type="radio" name="mic" value="false" v-model="audioEnable" /><span class="text">マイク OFF</span></label>
                 <button @click="joinRoom" class="btn btn-primary" v-if="!joined">入室</button>
                 <button @click="leaveRoom" class="btn btn-primary" v-else>退室</button>
             </div>
@@ -14,8 +14,9 @@
                     <dl>
                         <dt>カメラ</dt>
                         <dd>
-                            <label><input type="radio" name="face" value="on" v-model="videoFacingMode" /><span class="text">表側</span></label>
-                            <label><input type="radio" name="face" value="off" v-model="videoFacingMode" /><span class="text">裏側</span></label>
+                            <select @change="changeDevice" v-model="selectedVideoDevice">
+                                <option v-for="dev in videoDevices" :key="dev.deviceId" :value="dev.deviceId">{{dev.label}}</option>
+                            </select>
                         </dd>
                     </dl>
                     <dl>
@@ -42,11 +43,10 @@
             return {
                 videoDevices: [],
                 audioDevices: [],
+                videoEnable: true,
+                audioEnable: false,
                 selectedVideoDevice: null,
                 selectedAudioDevice: null,
-                videoEnable: 'on',
-                audioEnable: 'off',
-                videoFacingMode: 'on',
                 joined: false,
                 showSettins: false,
             }
@@ -60,8 +60,8 @@
             },
             async changeDevice() {
                 const localStream = await openLocalStream(
-                    this.videoFacingMode == 'on', this.videoEnable == 'on',
-                    this.selectedAudioDevice, this.audioEnable == 'on');
+                    this.selectedVideoDevice, this.videoEnable,
+                    this.selectedAudioDevice, this.audioEnable);
 
                 this.stopLocalStream();
 
@@ -193,9 +193,6 @@
         },
         watch: {
             audioEnable() {
-                this.changeDevice();
-            },
-            videoFacingMode() {
                 this.changeDevice();
             }
         },

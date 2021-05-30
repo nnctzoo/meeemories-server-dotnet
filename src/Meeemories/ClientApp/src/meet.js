@@ -17,11 +17,11 @@ export async function getInputDevices() {
     return { videos, audios };
 }
 
-export async function openLocalStream(facingMode, videoEnabled, audioDeviceId, audioEnabled) {
+export async function openLocalStream(videoDeviceId, videoEnabled, audioDeviceId, audioEnabled) {
     let localStream;
     try {
         localStream = await navigator.mediaDevices.getUserMedia({
-            video: { facingMode: facingMode ? 'user' : { exact: 'environment' } },
+            video: videoDeviceId ? { deviceId: { exact: videoDeviceId } } : true,
             audio: audioDeviceId ? { deviceId: { exact: audioDeviceId } } : true,
         })
     } catch (err) {
