@@ -994,3 +994,9 @@ input[type=radio] {
         font-size: 16px;
         max-width: calc(100vw - 128px);
     }
+    .meet__local__settings__body input[type=radio] + .text::before {
+        border-color: #EA6264;
+    }
+    .meet__local__settings__body input[type=radio]:checked + .text::before {
+        background-color: #EA6264;
+    }
