@@ -7,10 +7,10 @@ export async function getInputDevices() {
     for (let { kind, deviceId, label } of devices) {
         switch (kind) {
             case 'videoinput':
-                videos.push({ deviceId, label });
+                videos.push({ { exact: deviceId }, label });
                 break;
             case 'audioinput':
-                audios.push({ deviceId, label });
+                audios.push({ { exact: deviceId }, label });
                 break;
         }
     }
