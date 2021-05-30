@@ -21,8 +21,8 @@ export async function openLocalStream(videoDeviceId, videoEnabled, audioDeviceId
     let localStream;
     try {
         localStream = await navigator.mediaDevices.getUserMedia({
-            video: videoDeviceId ? { deviceId: videoDeviceId } : true,
-            audio: audioDeviceId ? { deviceId: audioDeviceId } : true,
+            video: videoDeviceId ? { deviceId: { exact: videoDeviceId } } : true,
+            audio: audioDeviceId ? { deviceId: { exact: audioDeviceId } } : true,
         })
     } catch (err) {
         console.error(err);
