@@ -2,19 +2,32 @@
     <section id="meet">
         <div class="meet__remote" ref="remotes"></div>
         <div class="meet__local" :class="{'meet__local--float':joined}">
-            <video ref="local" playsinline muted></video>
+            <video ref="local" playsinline muted @click="openSettings"></video>
             <div class="meet__local__toolbar">
                 <label><input type="radio" name="mic" value="true" v-model="audioEnable" /><span class="text">マイク ON</span></label>
                 <label><input type="radio" name="mic" value="false" v-model="audioEnable" /><span class="text">マイク OFF</span></label>
                 <button @click="joinRoom" class="btn btn-primary" v-if="!joined">入室</button>
                 <button @click="leaveRoom" class="btn btn-primary" v-else>退室</button>
-                <div style="display:none;">
-                    <select @change="changeDevice" v-model="selectedVideoDevice">
-                        <option v-for="dev in videoDevices" :key="dev.deviceId" :value="dev.deviceId">{{dev.label}}</option>
-                    </select>
-                    <select @change="changeDevice" v-model="selectedAudioDevice">
-                        <option v-for="dev in audioDevices" :key="dev.deviceId" :value="dev.deviceId">{{dev.label}}</option>
-                    </select>
+            </div>
+            <div class="meet__local__settings" v-if="showSettins">
+                <div class="meet__local__settings__body">
+                    <dl>
+                        <dt>カメラ</dt>
+                        <dd>
+                            <select @change="changeDevice" v-model="selectedVideoDevice">
+                                <option v-for="dev in videoDevices" :key="dev.deviceId" :value="dev.deviceId">{{dev.label}}</option>
+                            </select>
+                        </dd>
+                    </dl>
+                    <dl>
+                        <dt>マイク</dt>
+                        <dd>
+                            <select @change="changeDevice" v-model="selectedAudioDevice">
+                                <option v-for="dev in audioDevices" :key="dev.deviceId" :value="dev.deviceId">{{dev.label}}</option>
+                            </select>
+                        </dd>
+                    </dl>
+                    <button class="btn" @click="closeSettings">とじる</button>
                 </div>
             </div>
         </div>
@@ -35,6 +48,7 @@
                 selectedVideoDevice: null,
                 selectedAudioDevice: null,
                 joined: false,
+                showSettins: false,
             }
         },
         computed: {
@@ -158,6 +172,23 @@
                 this.leaveRoom();
                 this.stopLocalStream();
                 this.$router.push('/');
+            },
+            async openSettings() {
+                const { videos, audios } = await getInputDevices();
+
+                this.videoDevices.splice(0, this.videoDevices.length, ...videos);
+                this.audioDevices.splice(0, this.audioDevices.length, ...audios);
+
+                if (this.selectedVideoDevice == null && videos.length > 0)
+                    this.selectedVideoDevice = (videos.find(dev => dev.deviceId == 'default') || videos[0]).deviceId;
+
+                if (this.selectedAudioDevice == null && audios.length > 0)
+                    this.selectedAudioDevice = (audios.find(dev => dev.deviceId == 'default') || audios[0]).deviceId;
+
+                this.showSettins = true;
+            },
+            closeSettings() {
+                this.showSettins = false;
             }
         },
         watch: {
@@ -171,17 +202,6 @@
             }
             else {
                 await this.changeDevice();
-
-                const { videos, audios } = await getInputDevices();
-
-                this.videoDevices.push(...videos);
-                this.audioDevices.push(...audios);
-
-                if (videos.length > 0)
-                    this.selectedVideoDevice = (videos.find(dev => dev.deviceId == 'default') || videos[0]).deviceId;
-
-                if (audios.length > 0)
-                    this.selectedAudioDevice = (audios.find(dev => dev.deviceId == 'default') || audios[0]).deviceId;
             }
         }
     }
