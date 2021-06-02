@@ -50,7 +50,7 @@ namespace Meeemories.Controllers
                 var html = File.ReadAllText(path);
 
                 _html = html.Replace("$version$", _settings.ContainerName)
-                            .Replace("<!--extension-->", _settings.ExtensionHtml??string.Empty);
+                            .Replace("<!--extension-->", $"<script>window.skywayKey='{_settings.SkyWayApiKey}';</script>"+(_settings.ExtensionHtml ?? string.Empty)); ;
                 
                 return _html;
             }

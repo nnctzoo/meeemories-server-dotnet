@@ -7,6 +7,8 @@
         public string Password { get; set; }
         public int ExpiredMunites { get; set; }
         public string ExtensionHtml { get; set; }
+        public string SkyWayApiKey { get; set; }
+        public string SkyWaySecretKey { get; set; }
 
     }
 }

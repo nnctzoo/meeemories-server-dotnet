@@ -6,8 +6,8 @@
             <div class="meet__local__toolbar">
                 <label><input type="radio" name="mic" value="true" v-model="audioEnable" /><span class="text">マイク ON</span></label>
                 <label><input type="radio" name="mic" value="false" v-model="audioEnable" /><span class="text">マイク OFF</span></label>
-                <button @click="joinRoom" class="btn btn-primary" v-if="!joined">入室</button>
-                <button @click="leaveRoom" class="btn btn-primary" v-else>退室</button>
+                <button @click="joinRoom" class="btn btn-primary" v-if="joinable&&!joined">入室</button>
+                <button @click="leaveRoom" class="btn btn-primary" v-if="joined">退室</button>
             </div>
             <div class="meet__local__settings" v-if="showSettins">
                 <div class="meet__local__settings__body">
@@ -49,6 +49,7 @@
                 selectedAudioDevice: null,
                 joined: false,
                 showSettins: false,
+                joinable: false,
             }
         },
         computed: {
@@ -80,6 +81,7 @@
             joinRoom() {
                 if (this.$refs.local.srcObject) {
                     join({
+                        token: this.$state.token,
                         localStream: this.$refs.local.srcObject,
                         onOpenRoom: () => {
                             console.log('open room');
@@ -202,6 +204,7 @@
             }
             else {
                 await this.changeDevice();
+                this.joinable = true;
             }
         }
     }

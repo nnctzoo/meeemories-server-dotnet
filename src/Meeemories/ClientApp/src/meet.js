@@ -37,26 +37,44 @@ export async function openLocalStream(videoDeviceId, videoEnabled, audioDeviceId
 }
 
 let _peer = null;
-function lazyPeer() {
+function lazyPeer(token) {
     return new Promise(function (resolve, reject) {
         if (_peer && _peer.open) {
             resolve(_peer);
         }
         else {
-            _peer = new Peer({
-                key: window.skywayKey,
-                debug: 3,
-            });
-            _peer.once('open', () => {
-                resolve(_peer);
-            });
-            _peer.once('error', () => {
-                _peer = null;
-                reject();
-            });
-            _peer.once('close', () => {
-                _peer = null;
-            })
+            fetch('/api/skyway', {
+                method: 'post',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    token
+                })
+            }).then(response => {
+                if (!response.ok) {
+                    reject(response.statusText);
+                }
+                else {
+                    response.json().then(credential => {
+                        _peer = new Peer(credential.peerId, {
+                            key: window.skywayKey,
+                            credential,
+                            debug: 3,
+                        });
+                        _peer.once('open', () => {
+                            resolve(_peer);
+                        });
+                        _peer.once('error', () => {
+                            _peer = null;
+                            reject();
+                        });
+                        _peer.once('close', () => {
+                            _peer = null;
+                        })
+                    }).catch(reject);
+                }
+            }).catch(reject);
         }
     })
 }
@@ -64,6 +82,7 @@ const empty = function () { };
 const roomId = 'live';
 let room = null;
 export function join({
+    token,
     localStream,
     onOpenRoom = empty,
     onPeerJoin = empty,
@@ -71,7 +90,7 @@ export function join({
     onPeerLeave = empty,
     onCloseRoom = empty
 }) {
-    lazyPeer()
+    lazyPeer(token)
         .then(function (peer) {
             room = peer.joinRoom(roomId, {
                 mode: 'sfu',
