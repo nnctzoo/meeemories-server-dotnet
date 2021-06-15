@@ -102,6 +102,7 @@
                             if (wasActive) {
                                 this.$refs.remotes.firstElementChild.classList.add('active');
                             }
+                            this.masonry();
                         },
                         onOpenRemoteStream: stream => {
                             let video = this.$refs.remotes.querySelector(`[data-peer-id="${stream.peerId}"]`);
