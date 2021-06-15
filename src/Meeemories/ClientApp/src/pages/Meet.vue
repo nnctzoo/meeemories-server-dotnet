@@ -94,10 +94,14 @@
                         onPeerJoin: id => console.log(`peer ${id} is joined`),
                         onPeerLeave: id => {
                             console.log(`peer ${id} is leaved`)
-                            const video = this.$refs.querySelector(`[data-peer-id="${id}"]`);
+                            const video = this.$refs.remotes.querySelector(`[data-peer-id="${id}"]`);
+                            const wasActive = video.classList.contains('active');
                             video.srcObject.getTracks().forEach(track => track.stop());
                             video.srcObject = null;
                             video.remove();
+                            if (wasActive) {
+                                this.$refs.remotes.firstElementChild.classList.add('active');
+                            }
                         },
                         onOpenRemoteStream: stream => {
                             let video = this.$refs.remotes.querySelector(`[data-peer-id="${stream.peerId}"]`);
