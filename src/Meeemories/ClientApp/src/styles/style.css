@@ -51,10 +51,21 @@ body {
     height: 48px;
     background: white;
     position: fixed;
-    bottom: 0;
+    bottom: 32px;
     z-index: 1;
     box-shadow: 5px 5px 10px gray;
 }
+    .app__footer::after {
+        content: "";
+        width: 100vw;
+        height: 32px;
+        background: white;
+        position: fixed;
+        bottom: 0;
+        z-index: 1;
+        border-top: 1px solid rgb(250,232,226);
+        box-sizing: border-box;
+    }
 
 .actions {
     display: flex;
@@ -873,7 +884,7 @@ input[type="file"] {
 #meet {
     position: absolute;
     width: 100vw;
-    height: 100vh;
+    height: 100%;
     top: 0;
     left: 0;
     z-index: 9999;
@@ -915,6 +926,7 @@ input[type="file"] {
     object-fit: cover;
 }
 .meet__local--float {
+    position: fixed;
     top: auto;
     bottom: 16px;
     left: 0;

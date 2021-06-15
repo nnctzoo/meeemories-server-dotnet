@@ -31,7 +31,7 @@
                 </div>
             </div>
         </div>
-        <button class="popup__close" @click="back">
+        <button class="popup__close" @click="back" v-if="!joined">
             <i class="material-icons">arrow_back</i>
         </button>
     </section>
@@ -94,21 +94,22 @@
                         onPeerJoin: id => console.log(`peer ${id} is joined`),
                         onPeerLeave: id => {
                             console.log(`peer ${id} is leaved`)
-                            const remoteVideo = this.$refs.querySelector(
-                                `[data-peer-id="${peerId}"]`
-                            );
-                            remoteVideo.srcObject.getTracks().forEach(track => track.stop());
-                            remoteVideo.srcObject = null;
-                            remoteVideo.remove();
+                            const video = this.$refs.querySelector(`[data-peer-id="${id}"]`);
+                            video.srcObject.getTracks().forEach(track => track.stop());
+                            video.srcObject = null;
+                            video.remove();
                         },
                         onOpenRemoteStream: stream => {
-                            const newVideo = document.createElement('video');
-                            newVideo.srcObject = stream;
-                            newVideo.playsInline = true;
-                            newVideo.setAttribute('data-peer-id', stream.peerId);
-                            newVideo.addEventListener('click', this.selectRemote.bind(this));
-                            this.$refs.remotes.append(newVideo);
-                            newVideo.play().catch(console.error);
+                            let video = this.$refs.remotes.querySelector(`[data-peer-id="${stream.peerId}"]`);
+                            if (video == null) {
+                                video = document.createElement('video');
+                                video.playsInline = true;
+                                video.setAttribute('data-peer-id', stream.peerId);
+                                video.addEventListener('click', this.selectRemote.bind(this));
+                                this.$refs.remotes.append(video);
+                            }
+                            video.srcObject = stream;
+                            video.play().catch(console.error);
                             this.masonry();
                         }
                     })
@@ -116,6 +117,7 @@
             },
             leaveRoom() {
                 leave();
+                this.back();
             },
             selectRemote(ev) {
                 for (let active of this.$refs.remotes.querySelectorAll('.active')) {
@@ -171,7 +173,6 @@
                 }
             },
             back() {
-                this.leaveRoom();
                 this.stopLocalStream();
                 this.$router.push('/');
             },
