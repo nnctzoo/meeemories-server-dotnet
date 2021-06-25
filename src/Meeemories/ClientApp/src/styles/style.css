@@ -26,12 +26,14 @@ body {
 .logo--hidden {
     opacity: 0;
 }
-
+.app {
+    padding-top: 32px;
+}
 .app__header {
     width: 100vw;
     height: 48px;
     position: fixed;
-    top: 0;
+    top: 32px;
     z-index: 0;
 }
 
@@ -504,8 +506,20 @@ body {
 
 .uploading-item__remove {
     position: absolute;
-    right: 0;
-    bottom: 0;
+    top: 12px;
+    right: 12px;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    border: 2px solid transparent;
+    background: rgba(160, 160, 160, 0.4);
+    transition: all linear .15s;
+    color: white;
+    text-align: center;
+    text-decoration: none;
+    line-height: 30px;
+    user-select: none;
+    display:none;
 }
 
 .uploading-item__thumb {
@@ -594,14 +608,10 @@ body {
   from { font-size: 0; }
   to { font-size: 64px; }
 } */
-.uploading-item__remove {
-    display: none;
-    background: none;
-    border: none;
-}
-
 .uploading-item--succeeded .uploading-item__remove {
-    display: block;
+    display: flex;
+    justify-content:center;
+    align-content:center;
 }
 
 .uploading-item__breadcrumb {
