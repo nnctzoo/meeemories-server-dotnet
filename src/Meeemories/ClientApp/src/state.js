@@ -41,7 +41,14 @@ export const actions = {
         }
     },
     popup(media) {
-         state.popup = media;
+        state.popup = media;
+    },
+    saveScroll() {
+        state.savedPosition = window.scrollY;
+    },
+    loadScroll() {
+        window.scrollTo(0, state.savedPosition);
+        state.savedPosition = 0;
     },
     prev() {
         const index = state.medias.indexOf(state.popup);

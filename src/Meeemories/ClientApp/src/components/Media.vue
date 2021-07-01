@@ -46,6 +46,7 @@
         },
         methods: {
             onClick() {
+                this.$actions.saveScroll();
                 this.$actions.popup(this.info);
                 this.$router.push('/popup');
             },
