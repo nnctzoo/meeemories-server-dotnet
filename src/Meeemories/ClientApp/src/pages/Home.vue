@@ -32,12 +32,13 @@
             if (!await this.$actions.authorize()) {
                 this.$router.push('/login');
             }
-            else if (this.$state.savedPosition)
-            {
-                this.$actions.loadScroll();
-            }
             else {
-                await this.$actions.load();
+                if (this.$state.savedPosition) {
+                    this.$actions.loadScroll();
+                }
+                else {
+                    await this.$actions.load();
+                }
                 new IntersectionObserver(entries => {
                     for (let entry of entries) {
                         if (entry.isIntersecting) {
